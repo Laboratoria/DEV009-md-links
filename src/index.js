@@ -1,28 +1,31 @@
 const fs = require("fs");
 const path = require("path");
 
-function isMarkdownFile(filePath) {
-  return path.extname(filePath).toLowerCase() === ".md";
+function isMarkdownFile(rutePath) {
+  return path.extname(rutePath) === ".md";
 }
 
 function readingFile(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, "utf8", (err, data) => {
+    fs.readFile(path, "utf8", (data) => {
       resolve(data);
     });
   });
 }
 
-function mdLinks(filePath) {
+function mdLinks(rutePath, options) {
   return new Promise((resolve, reject) => {
-    const absolutePath = path.resolve(filePath);
-    if (!isMarkdownFile(absolutePath)) {
-      reject(new Error("El archivo no es de tipo Markdown"));
+    const absolutePath = path.resolve(rutePath);
+    if (!fs.existsSync(absolutePath)) {
+      reject(new Error("La ruta no existe"));
     } else {
-      //si es un archivo markdown lee el archivo
-      readingFile(absolutePath).then((data) => resolve(data));
-
-      // extraer los links que contenga el archivo
+      if (!isMarkdownFile(absolutePath)) {
+        reject(new Error("El archivo no es de tipo Markdown"));
+      } else {
+        // Si es un archivo markdown, lee el archivo
+        readingFile(absolutePath).then((data) => resolve(data));
+        // Extraer los links que contenga el archivo (Esta parte está comentada y parece que falta su implementación)
+      }
     }
   });
 }
@@ -37,7 +40,7 @@ function mdLinks(filePath) {
 //const mdLinks = require("md-links");
 
 mdLinks("./README.md")
-  .then((links) => {
+  .then(() => {
     // => [{ href, text, file }, ...]
     // console.log(links);
   })
