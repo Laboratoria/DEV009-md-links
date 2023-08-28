@@ -39,10 +39,10 @@ function mdLinks(rutePath, options) {
 
 //const mdLinks = require("md-links");
 
-mdLinks("./README.md")
-  .then(() => {
+mdLinks("../README.md")
+  .then((links) => {
     // => [{ href, text, file }, ...]
-    // console.log(links);
+    console.log(links);
   })
   .catch((error) => {
     console.log(error);
