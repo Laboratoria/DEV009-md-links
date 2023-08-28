@@ -8,7 +8,6 @@ function isMarkdownFile(filePath) {
 function readingFile(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, "utf8", (err, data) => {
-      //if (err) throw err;
       resolve(data);
     });
   });
@@ -26,7 +25,7 @@ function mdLinks(filePath) {
       // extraer los links que contenga el archivo
     }
   });
-};
+}
 
 /*return new Promise((resolve, reject) => {
     if (fs.existsSync(path)) {
@@ -40,7 +39,7 @@ function mdLinks(filePath) {
 mdLinks("./README.md")
   .then((links) => {
     // => [{ href, text, file }, ...]
-    console.log(links);
+    // console.log(links);
   })
   .catch((error) => {
     console.log(error);
