@@ -7,8 +7,12 @@ function isMarkdownFile(rutePath) {
 
 function readingFile(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, "utf8", (data) => {
-      resolve(data);
+    fs.readFile(path, "utf8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
     });
   });
 }
@@ -40,12 +44,14 @@ function mdLinks(rutePath, options) {
 //const mdLinks = require("md-links");
 
 mdLinks("../README.md")
-  .then((links) => {
+  .then((data) => {
     // => [{ href, text, file }, ...]
-    console.log(links);
+    console.log(data);
   })
   .catch((error) => {
     console.log(error);
   });
+
+//console.log(path.join(__dirname, "./README.js"))
 
 module.exports = mdLinks;
