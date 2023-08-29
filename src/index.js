@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const marked = require('marked');
 
 function isMarkdownFile(rutePath) {
   return path.extname(rutePath) === ".md";
@@ -27,29 +28,34 @@ function mdLinks(rutePath, options) {
         reject(new Error("El archivo no es de tipo Markdown"));
       } else {
         // Si es un archivo markdown, lee el archivo
-        readingFile(absolutePath).then((data) => resolve(data));
-        // Extraer los links que contenga el archivo (Esta parte está comentada y parece que falta su implementación)
+        readingFile(absolutePath).then((data) => {
+          const links = [];
+          const tokens = marked.lexer(data);
+
+          for (const token of tokens) {
+            if (token.type === 'link') {
+              links.push({
+                href: token.href,
+                text: token.text,
+                file: absolutePath,
+              });
+            }
+          }
+          resolve(links);
+        });
       }
     }
   });
-}
+}  
 
-/*return new Promise((resolve, reject) => {
-    if (fs.existsSync(path)) {
-    } else {
-      reject("La ruta no existe");
-    }
-  });*/
-
-//const mdLinks = require("md-links");
-
-mdLinks("../README.md")
-  .then((data) => {
+const filePath = '../README.md';
+mdLinks(filePath)
+  .then((links) => {
     // => [{ href, text, file }, ...]
-    console.log(data);
+    console.log('Enlaces encontrados:', links);
   })
   .catch((error) => {
-    console.log(error);
+    console.log('Error:', error.message);
   });
 
 //console.log(path.join(__dirname, "./README.js"))
