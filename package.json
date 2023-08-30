@@ -10,5 +10,13 @@
   },
   "scripts": {
     "test": "jest --coverage"
+  },
+  "dependencies": {
+    "markdown-it": "^13.0.1",
+    "marked": "^7.0.5",
+    "node-html-parser": "^6.1.6"
+  },
+  "devDependencies": {
+    "jest": "^29.6.4"
   }
 }

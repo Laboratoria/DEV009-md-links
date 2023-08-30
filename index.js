@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const marked = require('marked');
+const md = require("markdown-it")(); // Importa y configura markdown-it
+const { parse } = require("node-html-parser"); // Librería para parsear HTML
+//const marked = require("marked");
 
 function isMarkdownFile(rutePath) {
   return path.extname(rutePath) === ".md";
@@ -28,34 +30,38 @@ function mdLinks(rutePath, options) {
         reject(new Error("El archivo no es de tipo Markdown"));
       } else {
         // Si es un archivo markdown, lee el archivo
-        readingFile(absolutePath).then((data) => {
-          const links = [];
-          const tokens = marked.lexer(data);
+        readingFile(absolutePath)
+          .then((data) => {
+            const htmlContent = md.render(data); // Convierte el Markdown a HTML
+            const root = parse(htmlContent); // Parsea el HTML con node-html-parser
+            const links = [];
 
-          for (const token of tokens) {
-            if (token.type === 'link') {
+            root.querySelectorAll("a").forEach((anchor) => {
               links.push({
-                href: token.href,
-                text: token.text,
+                href: anchor.getAttribute("href"),
+                text: anchor.text,
                 file: absolutePath,
               });
-            }
-          }
-          resolve(links);
-        });
+            });
+            resolve(links); // Resuelve la promesa con el array de enlaces
+          })
+          .catch((error) => {
+            reject(error);
+          });
       }
     }
   });
-}  
+}
 
-const filePath = '../README.md';
-mdLinks(filePath)
+
+//const filePath = '../README.md';
+mdLinks("./Guiaweb.md")
   .then((links) => {
     // => [{ href, text, file }, ...]
-    console.log('Enlaces encontrados:', links);
+    console.log("Enlaces encontrados:", links);
   })
   .catch((error) => {
-    console.log('Error:', error.message);
+    console.log("Error:", error.message);
   });
 
 //console.log(path.join(__dirname, "./README.js"))
