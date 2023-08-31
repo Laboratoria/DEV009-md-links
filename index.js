@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")(); // Importa y configura markdown-it
 const { parse } = require("node-html-parser"); // Librería para parsear HTML
-//const marked = require("marked");
+const axios = require("axios");
 
 function isMarkdownFile(rutePath) {
   return path.extname(rutePath) === ".md";
@@ -20,7 +20,24 @@ function readingFile(path) {
   });
 }
 
-function mdLinks(rutePath, options) {
+function validateLinks(url) {
+  return axios
+    .get(url)
+    .then((response) => {
+      return {
+        status: response.status,
+        ok: response.status >= 200 && response.status < 400 ? "ok" : "fail",
+      };
+    })
+    .catch((error) => {
+      return {
+        status: error.response ? error.response.status : "No Response",
+        ok: "fail",
+      };
+    });
+}
+
+function mdLinks(rutePath, validate) {
   return new Promise((resolve, reject) => {
     const absolutePath = path.resolve(rutePath);
     if (!fs.existsSync(absolutePath)) {
@@ -43,7 +60,26 @@ function mdLinks(rutePath, options) {
                 file: absolutePath,
               });
             });
-            resolve(links); // Resuelve la promesa con el array de enlaces
+
+            if (validate) {
+              const validatePromises = links.map((link) => {
+                return validateLinks(link.href) // Pasa link.href como la URL a validar
+                  .then((validationResult) =>
+                    Object.assign(link, validationResult)
+                  )
+                  .catch((error) => {
+                    link.status = "Error";
+                    link.ok = "fail";
+                    return link;
+                  });
+              });
+
+              Promise.all(validatePromises)
+                .then((validatedLinks) => resolve(validatedLinks))
+                .catch((error) => reject(error));
+            } else {
+              resolve(links);
+            }
           })
           .catch((error) => {
             reject(error);
@@ -53,9 +89,7 @@ function mdLinks(rutePath, options) {
   });
 }
 
-
-//const filePath = '../README.md';
-mdLinks("./Guiaweb.md")
+mdLinks("./Guiaweb.md", true)
   .then((links) => {
     // => [{ href, text, file }, ...]
     console.log("Enlaces encontrados:", links);
