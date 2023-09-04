@@ -1,8 +1,6 @@
 const mdLinks = require('../mdlinks');
 
-
 describe('mdLinks', () => {
-
   // Testea si es un promise y retorna un array 
   it('Should return a Promise', (done) => {
     mdLinks('./README.md')
@@ -28,6 +26,4 @@ describe('mdLinks', () => {
   test('Should throw an error if the file is not a markdown file', () => {
     expect(() => mdLinks('./example.md')).rejects.toThrow('The file is not a Markdown (.md).');
   });
-
-
 });

@@ -1,11 +1,12 @@
 const { mdLinks }= require('./mdlinks');
 
-mdLinks('./README.md')
+mdLinks('./example.md')
   .then(links => {
     console.log('Enlaces encontrados:');
     links.forEach(link => {
       console.log(`Texto: ${link.text}`);
       console.log(`URL: ${link.href}`);
+      console.log(`Path: ${link.file}`);
       console.log('---');
     });
   })

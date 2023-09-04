@@ -3,7 +3,7 @@ const path = require('path');
 const MarkdownIt = require('markdown-it');
 
 const mdLinks = (filePath) => {
-  const absolutePath = path.resolve(filePath); 
+  const absolutePath = path.resolve(filePath);
 
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(absolutePath)) {
@@ -28,16 +28,30 @@ const mdLinks = (filePath) => {
 
       const links = [];
 
-      tokens.forEach((token, index) => {
-        if (token.type === 'link_open' && token.href) {
-          const nextToken = tokens[index + 1];
-          if (nextToken && nextToken.type === 'text') {
-            links.push({
-              href: token.href,
-              text: nextToken.content,
-              file: absolutePath,
-            });
-          }
+      let isInsideLink = false; // Variable para rastrear si estamos dentro de un enlace
+
+      tokens.forEach((token) => {
+        if (token.type === 'inline') {
+          // En tokens de tipo 'inline', buscamos enlaces
+          const inlineTokens = token.children;
+          inlineTokens.forEach((inlineToken) => {
+            if (inlineToken.type === 'link_open') {
+              // Si encontramos un token de apertura de enlace
+              isInsideLink = true; // Estamos dentro de un enlace
+              links.push({
+                href: inlineToken.attrGet('href'), // Obtenemos la URL del enlace
+                text: '', // Inicializamos el texto del enlace como una cadena vacía
+                file: absolutePath,
+              });
+            } else if (isInsideLink && inlineToken.type === 'text') {
+              // Si estamos dentro de un enlace y encontramos un token de texto
+              const lastLink = links[links.length - 1];
+              lastLink.text += inlineToken.content; // Agregamos el texto al enlace anterior
+            } else if (isInsideLink && inlineToken.type === 'link_close') {
+              // Si encontramos un token de cierre de enlace
+              isInsideLink = false; // Ya no estamos dentro de un enlace
+            }
+          });
         }
       });
 
@@ -46,12 +60,14 @@ const mdLinks = (filePath) => {
         return;
       }
 
-      return(links);
+      resolve(links);
     });
   });
 };
 
 module.exports = { mdLinks };
+
+
 
 
 /*/ Función para identificar si la ruta existe
