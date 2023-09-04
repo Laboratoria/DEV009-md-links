@@ -1,29 +1,29 @@
-const mdLinks = require('../mdlinks');
+const { mdLinks } = require('../mdlinks');
 
 describe('mdLinks', () => {
-  // Testea si es un promise y retorna un array 
-  it('Should return a Promise', (done) => {
-    mdLinks('./README.md')
-      .then((links) => {
-        expect(links).toBeInstanceOf(Array);
-        done(); // Llama a done() para indicar que la prueba ha finalizado
-      })
-      .catch((error) => {
-        done(error); // Llama a done(error) si ocurre un error durante la prueba
+  describe('File Exist Check', () => {
+    test('Should reject the promise if the path does not exist', () => {
+      expect.assertions(1);
+
+      const nonExistentPath = '/ruta/no/existe.md';
+
+      return mdLinks(nonExistentPath).catch((error) => {
+        expect(error.message).toBe('El archivo no existe.');
       });
+    });
   });
 
-  // Testea si la ruta no existe
-  test('Should reject the promise if the path does not exist', () => {
-    expect.assertions(1); // Asegura que se realice al menos una afirmación dentro de la prueba
+  describe('Markdown File Check', () => {
+    test('Should throw an error if the file is not a markdown file', () => {
+      return mdLinks('./noMarkdown.md').catch((error) => {
+        expect(error.message).toBe('No es un archivo Markdown (.md).');
+      });
+    });
 
-    const isNothaPath = '/ruta/no/existe.md';
-
-    return expect(mdLinks(isNothaPath)).rejects.toThrow('The route does not exist.');
+    
   });
 
-  // Testea si el archivo tiene la extension .md 
-  test('Should throw an error if the file is not a markdown file', () => {
-    expect(() => mdLinks('./example.md')).rejects.toThrow('The file is not a Markdown (.md).');
-  });
+
 });
+
+

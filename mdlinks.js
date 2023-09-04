@@ -12,7 +12,7 @@ const mdLinks = (filePath) => {
     }
 
     if (!absolutePath.toLowerCase().endsWith('.md')) {
-      reject(new Error('El archivo no es un archivo Markdown (.md).'));
+      reject(new Error('No es un archivo Markdown (.md).'));
       return;
     }
 
