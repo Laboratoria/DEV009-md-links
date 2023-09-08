@@ -12,8 +12,8 @@ function mdLinks (filePath, options) {
          if(searchMdFiles(filePath)){
           resolve('el archivo es md');
          }   else {
-          reject('el archivo no es md');
-         }            //comprobar si archivo es md
+          reject('el archivo no es md');  //comprobar si archivo es md
+         }           
 
     } else {
       reject('La ruta no existe'); // rechazar la promesa"la ruta no existe"
