@@ -7,5 +7,13 @@
   "bootcamp": {
     "createdAt": "2023-08-22T22:00:38.678Z",
     "commit": "24f5a51ee0a15f345b59fcd2ef44c3616abdfce5"
+  },
+  "dependencies": {
+    "jest": "^29.6.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0"
   }
 }
