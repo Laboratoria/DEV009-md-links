@@ -7,12 +7,12 @@ const mdLinks = (filePath) => {
 
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(absolutePath)) {
-      reject(new Error('El archivo no existe.'));
+      reject(new Error('La ruta no existe.'));
       return;
     }
 
-    if (!absolutePath.toLowerCase().endsWith('.md')) {
-      reject(new Error('No es un archivo Markdown (.md).'));
+    if (!path.extname(absolutePath).match(/\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/i)) {
+      reject(new Error('No es un archivo Markdown.'));
       return;
     }
 

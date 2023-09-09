@@ -8,15 +8,18 @@ describe('mdLinks', () => {
       const nonExistentPath = '/ruta/no/existe.md';
 
       return mdLinks(nonExistentPath).catch((error) => {
-        expect(error.message).toBe('El archivo no existe.');
+        expect(error.message).toBe('La ruta no existe.');
       });
     });
   });
 
   describe('Markdown File Check', () => {
     test('Should throw an error if the file is not a markdown file', () => {
-      return mdLinks('./noMarkdown.md').catch((error) => {
-        expect(error.message).toBe('No es un archivo Markdown (.md).');
+      expect.assertions(1);
+
+      const nonmdfile = './thumb.png';
+      return mdLinks(nonmdfile).catch((error) => {
+        expect(error.message).toBe('No es un archivo Markdown.');
       });
     });
 
