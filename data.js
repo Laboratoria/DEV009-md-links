@@ -1,4 +1,5 @@
 const axios = require('axios');
+let colors = require('colors');
 
 const validateLinks = (links) => {
   // Mapeamos los enlaces y para cada uno realizamos la validación
@@ -19,13 +20,13 @@ const validateUrl = (url) => {
     .then(response => {
       return {
         status: response.status, //El código de estado HTTP
-        ok: response.status >= 200 && response.status < 400 ? 'ok' : 'fail',
+        ok: response.status >= 200 && response.status < 400 ? 'ok'.green : 'fail'.red ,
       };
     })
     .catch(error => {
       return {
         status: error.response ? error.response.status : 'No Response',
-        ok: 'fail',
+        ok: 'fail'.red,
       };
     });
 };

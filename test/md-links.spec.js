@@ -1,6 +1,7 @@
 const { mdLinks } = require('../mdlinks');
 const axios = require('axios');
 const { validateLinks } = require('../data');
+let colors = require('colors');
 
 describe('mdLinks', () => {
   describe('File Exist Check', () => {
@@ -49,8 +50,8 @@ describe('validateLinks', () => {
     return validateLinks(links).then((validatedLinks) => {
       // Verifica que los enlaces validados tengan los valores esperados
       expect(validatedLinks).toEqual([
-        { href: 'http://example.com/link1', status: 200, ok: 'ok' },
-        { href: 'http://example.com/link2', status: 200, ok: 'ok' },
+        { href: 'http://example.com/link1', status: 200, ok: 'ok'.green },
+        { href: 'http://example.com/link2', status: 200, ok: 'ok'.green },
       ]);
     });
   });
@@ -68,8 +69,8 @@ describe('validateLinks', () => {
     return validateLinks(links).then((validatedLinks) => {
       // Verifica que los enlaces validados tengan los valores esperados
       expect(validatedLinks).toEqual([
-        { href: 'http://example.com/link1', status: 404, ok: 'fail' },
-        { href: 'http://example.com/link2', status: 404, ok: 'fail' },
+        { href: 'http://example.com/link1', status: 404, ok: 'fail'.red },
+        { href: 'http://example.com/link2', status: 404, ok: 'fail'.red },
       ]);
     });
   });

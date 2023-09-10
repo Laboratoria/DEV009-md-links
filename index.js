@@ -1,4 +1,5 @@
 const { mdLinks }= require('./mdlinks');
+let colors = require('colors');
 
 mdLinks('./example.md')
   .then(links => {
@@ -19,7 +20,7 @@ mdLinks('./example.md')
       console.log(`Texto: ${link.text}`);
       console.log(`URL: ${link.href}`);
       console.log(`Path: ${link.file}`);
-      console.log(`Status: ${link.status}`);
+      console.log(`Status: ${link.status}`.yellow);
       console.log(`OK: ${link.ok}`);
       console.log('---');
     });
