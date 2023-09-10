@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it');
+const { validateLinks } = require('./data'); // Asegúrate de que la ruta sea correcta
 
-const mdLinks = (filePath) => {
+
+const mdLinks = (filePath,validate=false) => {
   const absolutePath = path.resolve(filePath);
 
   return new Promise((resolve, reject) => {
@@ -59,8 +61,17 @@ const mdLinks = (filePath) => {
         reject(new Error('No se encontraron enlaces en el archivo Markdown.'));
         return;
       }
-
-      resolve(links);
+      if (validate) {
+        validateLinks(links)
+          .then((validatedLinks) => {
+            resolve(validatedLinks);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        resolve(links);
+      }
     });
   });
 };

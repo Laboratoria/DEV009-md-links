@@ -1,4 +1,6 @@
 const { mdLinks } = require('../mdlinks');
+const axios = require('axios');
+const { validateLinks } = require('../data');
 
 describe('mdLinks', () => {
   describe('File Exist Check', () => {
@@ -27,6 +29,50 @@ describe('mdLinks', () => {
   });
 
 
+});
+
+
+// Mockear Axios
+jest.mock('axios');
+
+describe('validateLinks', () => {
+  it('debería validar los enlaces exitosamente', () => {
+    const links = [
+      { href: 'http://example.com/link1' },
+      { href: 'http://example.com/link2' },
+    ];
+
+    // Configura el comportamiento de Axios cuando se llama axios.get
+    axios.get.mockResolvedValue({ status: 200 });
+
+    // Llama a la función que deseas probar
+    return validateLinks(links).then((validatedLinks) => {
+      // Verifica que los enlaces validados tengan los valores esperados
+      expect(validatedLinks).toEqual([
+        { href: 'http://example.com/link1', status: 200, ok: 'ok' },
+        { href: 'http://example.com/link2', status: 200, ok: 'ok' },
+      ]);
+    });
+  });
+
+  it('debería manejar errores de validación', () => {
+    const links = [
+      { href: 'http://example.com/link1' },
+      { href: 'http://example.com/link2' },
+    ];
+
+    // Configura el comportamiento de Axios cuando se llama axios.get para simular un error
+    axios.get.mockRejectedValue({ response: { status: 404 } });
+
+    // Llama a la función que deseas probar
+    return validateLinks(links).then((validatedLinks) => {
+      // Verifica que los enlaces validados tengan los valores esperados
+      expect(validatedLinks).toEqual([
+        { href: 'http://example.com/link1', status: 404, ok: 'fail' },
+        { href: 'http://example.com/link2', status: 404, ok: 'fail' },
+      ]);
+    });
+  });
 });
 
 
