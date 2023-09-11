@@ -1,16 +1,17 @@
 const { mdLinks } = require('../mdlinks');
 const axios = require('axios');
-const { validateLinks } = require('../data');
+const { validateLinks, pathExists, isMarkdownFile, verifyMarkdown } = require('../data');
 let colors = require('colors');
+const fs = require('fs');
 
-describe('mdLinks', () => {
+describe('pathExists', () => {
   describe('File Exist Check', () => {
     test('Should reject the promise if the path does not exist', () => {
       expect.assertions(1);
 
       const nonExistentPath = '/ruta/no/existe.md';
 
-      return mdLinks(nonExistentPath).catch((error) => {
+      return pathExists(nonExistentPath).catch((error) => {
         expect(error.message).toBe('La ruta no existe.');
       });
     });
@@ -21,23 +22,20 @@ describe('mdLinks', () => {
       expect.assertions(1);
 
       const nonmdfile = './thumb.png';
-      return mdLinks(nonmdfile).catch((error) => {
-        expect(error.message).toBe('No es un archivo Markdown.');
+      return  verifyMarkdown(nonmdfile).catch((error) => {
+        expect(error.message).toBe('The file is not a Markdown (.md).');
       });
     });
 
     
   });
-
-
 });
-
 
 // Mockear Axios
 jest.mock('axios');
 
 describe('validateLinks', () => {
-  it('debería validar los enlaces exitosamente', () => {
+  it('Should validate links succesfully', () => {
     const links = [
       { href: 'http://example.com/link1' },
       { href: 'http://example.com/link2' },
@@ -50,13 +48,13 @@ describe('validateLinks', () => {
     return validateLinks(links).then((validatedLinks) => {
       // Verifica que los enlaces validados tengan los valores esperados
       expect(validatedLinks).toEqual([
-        { href: 'http://example.com/link1', status: 200, ok: 'ok'.green },
-        { href: 'http://example.com/link2', status: 200, ok: 'ok'.green },
+        { href: 'http://example.com/link1', status: 200, ok: 'ok' },
+        { href: 'http://example.com/link2', status: 200, ok: 'ok'},
       ]);
     });
   });
 
-  it('debería manejar errores de validación', () => {
+  it('Should manage a validation error', () => {
     const links = [
       { href: 'http://example.com/link1' },
       { href: 'http://example.com/link2' },
@@ -69,11 +67,25 @@ describe('validateLinks', () => {
     return validateLinks(links).then((validatedLinks) => {
       // Verifica que los enlaces validados tengan los valores esperados
       expect(validatedLinks).toEqual([
-        { href: 'http://example.com/link1', status: 404, ok: 'fail'.red },
-        { href: 'http://example.com/link2', status: 404, ok: 'fail'.red },
+        { href: 'http://example.com/link1', status: 404, ok: 'fail' },
+        { href: 'http://example.com/link2', status: 404, ok: 'fail' },
       ]);
     });
   });
 });
 
 
+//validate looking files into a directory
+
+describe('mdLinks', () => {
+  describe('Directory Exist Check', () => {
+
+    it('Should reject with an error if there are no correct directory', () => {
+      const directoryPath = './data_testing/badDirectory';
+
+      return mdLinks(directoryPath).catch((error) => {
+        expect(error.message).toBe('La ruta del directorio no existe.');
+      });
+    });
+  });
+});

@@ -1,7 +1,24 @@
 const { mdLinks }= require('./mdlinks');
 let colors = require('colors');
 
-mdLinks('./example.md')
+mdLinks('./directory')
+  .then((links) => {
+    console.log(links);
+  })
+  .catch(console.error);
+
+mdLinks('./directory', true)
+  .then((links) => {
+    console.log(links);
+  })
+  .catch(console.error);
+
+mdLinks('./directory', false)
+  .then((links) => {
+    console.log(links);
+  })
+  .catch(console.error);
+/* mdLinks('./example.md')
   .then(links => {
     console.log('Enlaces encontrados:');
     links.forEach(link => {
@@ -37,4 +54,4 @@ mdLinks('./example.md',false)
       console.log('---');
     });
   })
-  .catch(error => console.error(error.message));
+  .catch(error => console.error(error.message)); */
