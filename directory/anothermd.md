@@ -1,1 +1,1 @@
-[Trello](https://trello.com/b/xQ8nT574/md-links) Trello es la herramienta de gestión de proyectos definitiva. Pon en marcha un tablero en segundos, automatiza tareas tediosas y colabora desde donde quieras
+[Trello](https://trello.com/b/xQ8nT574/md-links) Trello es la herramienta de gestión de proyectos definitiva. Pon en marcha un tablero en segundos, automatiza tareas tediosas y colabora desde donde quieras.
