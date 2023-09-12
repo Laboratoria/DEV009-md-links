@@ -1,12 +1,20 @@
 {
-  "name": "md-links",
+  "name": "md-links-camim",
   "version": "0.1.0",
+  "description": "Validates links, providing with status and information about validating, including broken links.",
+  "main": "index.js",
+  "authors": [
+    "Camila Mamani"
+  ],
   "engines": {
     "node": ">=16.x"
   },
   "scripts": {
     "test": "jest --coverage" ,
     "eslint": "eslint --ext .js"
+  },
+  "bin": {
+    "md-links": "./cli.js"
   },
   "bootcamp": {
     "createdAt": "2023-08-22T22:00:38.678Z",

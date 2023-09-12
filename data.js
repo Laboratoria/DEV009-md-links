@@ -133,7 +133,19 @@ const isDirectory = (absolutePath) => {
   });
 };
 
+const handleError = (error) => {
+  switch (error.message) {
+    case 'The route does not exist.':
+      console.error(colors.red('Error: The provided path does not exist. Please provide a valid path.'));
+      break;
+    case 'The argument must be a string.':
+      console.error(colors.red('Error: The argument is not a string.'));
+      break;
+    case 'The file is not a Markdown (.md).':
+      console.error(colors.red('Error: The file is not a Markdown.'));
+      default:
+      console.error(error);
+  }
+};
 
-
-
-module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory };
+module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError};

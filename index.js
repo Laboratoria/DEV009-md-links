@@ -1,57 +1,43 @@
-const { mdLinks }= require('./mdlinks');
-let colors = require('colors');
+const fs = require('fs');
+const path = require('path');
+const { extractLinks, isMarkdownFile, readFileContent, validateLinks, pathExists, isDirectory } = require('./data.js');
 
-mdLinks('./directory')
-  .then((links) => {
-    console.log(links);
-  })
-  .catch(console.error);
+const mdLinks = (directoryPath, validate) => {
+  const absolutePath = path.resolve(directoryPath);
 
-mdLinks('./directory', true)
-  .then((links) => {
-    console.log(links);
-  })
-  .catch(console.error);
+  return new Promise((resolve, reject) => {
+    pathExists(absolutePath)
+      .then(() => isDirectory(absolutePath))
+      .then(() => {
+        const filePromises = [];
 
-mdLinks('./directory', false)
-  .then((links) => {
-    console.log(links);
-  })
-  .catch(console.error);
-/* mdLinks('./example.md')
-  .then(links => {
-    console.log('Enlaces encontrados:');
-    links.forEach(link => {
-      console.log(`Texto: ${link.text}`);
-      console.log(`URL: ${link.href}`);
-      console.log(`Path: ${link.file}`);
-      console.log('---');
-    });
-  })
-  .catch(error => console.error(error.message));
+        const files = fs.readdirSync(absolutePath);
 
- mdLinks('./example.md',true)
-  .then(links => {
-    console.log('Enlaces encontrados:');
-    links.forEach(link => {
-      console.log(`Texto: ${link.text}`);
-      console.log(`URL: ${link.href}`);
-      console.log(`Path: ${link.file}`);
-      console.log(`Status: ${link.status}`.yellow);
-      console.log(`OK: ${link.ok}`);
-      console.log('---');
-    });
-  })
-  .catch(error => console.error(error.message));
+        files.forEach((file) => {
+          const filePath = path.join(absolutePath, file);
 
-mdLinks('./example.md',false)
-  .then(links => {
-    console.log('Enlaces encontrados:');
-    links.forEach(link => {
-      console.log(`Texto: ${link.text}`);
-      console.log(`URL: ${link.href}`);
-      console.log(`Path: ${link.file}`);
-      console.log('---');
-    });
-  })
-  .catch(error => console.error(error.message)); */
+          if (isMarkdownFile(filePath)) {
+            filePromises.push(
+              readFileContent(filePath)
+                .then((fileContent) => extractLinks(fileContent, filePath))
+                .then((links) => (validate ? validateLinks(links) : links))
+            );
+          }
+        });
+
+        Promise.all(filePromises)
+          .then((resultArrays) => {
+            const allLinks = resultArrays.flat();
+            resolve(allLinks);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+module.exports = { mdLinks };
