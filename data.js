@@ -1,3 +1,17 @@
-const fs = require('fs');
+const fs = require('node:fs');
+const path = require('path');
 
-module.exports = fs;
+
+function convertToAbsolutePath(pathReceived){
+    return new Promise ( function(resolve,reject){
+ 
+        if (fs.existsSync(pathReceived)){
+            resolve (path.resolve(pathReceived));
+        }
+        reject('No existe la ruta');
+    })
+}
+
+
+
+module.exports = convertToAbsolutePath;

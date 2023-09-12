@@ -1,6 +1,8 @@
 const mdLinks = require('./md-links');
 
-mdLinks().catch((error)=>{
+mdLinks('').then((result)=>{
+  console.log(result)
+}).catch((error)=>{
   console.log(error);
 });
 
