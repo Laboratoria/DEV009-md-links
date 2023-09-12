@@ -1,6 +1,8 @@
 const mdLinks = require('./md-links');
 
-mdLinks().catch((error)=>{
+mdLinks('README.md').then((path)=>{
+  console.log(path)
+}).catch((error)=>{
   console.log(error);
 });
 

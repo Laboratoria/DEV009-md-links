@@ -1,11 +1,12 @@
-const fs = require('./data');
+const existsSync = require('./data');
+const convertToAbsolutePath = require('./data');
 
 //Crear la funcion mdLinks
-const mdLinks = (path, options) => {
+const mdLinks = (pathReceived) => {
 return new Promise (function(resolve,reject){
-  // identificar si la ruta existe
-  // convertir la ruta a absolutamdLinks(pat);
-  if(fs.existsSync(path)){
+  
+  if(existsSync(pathReceived)){
+    resolve (convertToAbsolutePath(pathReceived));
 
   }else{
     reject('La ruta no existe');
