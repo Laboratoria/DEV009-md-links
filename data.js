@@ -8,7 +8,7 @@ const pathExists = (absolutePath) => {
   return new Promise((resolve, reject) => {
     fs.access(absolutePath, fs.constants.F_OK, (err) => {
       if (err) {
-        reject(new Error('La ruta no existe.'));
+        reject(new Error('The path does not exist.'));
       } else {
         resolve(true);
       }
@@ -16,7 +16,7 @@ const pathExists = (absolutePath) => {
   });
 };
 
-// ------------> Verificación de archivo Markdown <-------------------
+// ------------ Verificación de archivo Markdown -------------------
 // Función que verifica si el archivo es markdown devolviendo un booleano
 const isMarkdownFile = (file) => {
   return path.extname(file) === '.md';
@@ -34,7 +34,7 @@ function readFileContent(absolutePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(absolutePath, 'utf-8', (err, data) => {
       if (err) {
-        reject(new Error('Error al leer el archivo.'));
+        reject(new Error('Can not read the file'));
         return;
       }
       resolve({ absolutePath, data });
@@ -73,7 +73,7 @@ const extractLinks = ({ absolutePath, data }) => {
   });
 
   if (links.length === 0) {
-    return Promise.reject(new Error('No se encontraron enlaces en el archivo Markdown.'));
+    return Promise.reject(new Error('There are not links in the Markdown file.'));
   }
 
   return Promise.resolve(links);
@@ -113,4 +113,27 @@ const validateUrl = (url) => {
     });
 };
 
-module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl };
+const directoryExists = (absolutePath) => {
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(absolutePath)) {
+      resolve(true);
+    } else {
+      reject(new Error('The path does not exist'));
+    }
+  });
+};
+
+const isDirectory = (absolutePath) => {
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(absolutePath) && fs.lstatSync(absolutePath).isDirectory()) {
+      resolve(true);
+    } else {
+      reject(new Error('The path is not a directory'));
+    }
+  });
+};
+
+
+
+
+module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory };

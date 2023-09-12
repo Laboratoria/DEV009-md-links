@@ -5,7 +5,8 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage" ,
+    "eslint": "eslint --ext .js"
   },
   "bootcamp": {
     "createdAt": "2023-08-22T22:00:38.678Z",
