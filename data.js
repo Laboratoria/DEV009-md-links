@@ -1,4 +1,4 @@
-const fs = require('node:fs');
+const fs = require('fs');
 const path = require('path');
 
 
@@ -10,6 +10,10 @@ function convertToAbsolutePath(pathReceived){
         }
         reject('No existe la ruta');
     })
+}
+
+function readExtFile(pathReceived){
+    //
 }
 
 
