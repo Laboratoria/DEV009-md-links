@@ -37,4 +37,13 @@ describe('readExtFile', ()=>{
     })
 
   });
+
+})
+
+describe('readMarkdownFile', ()=>{
+  it('should call to function readFile', () =>{
+    const readFile = jest.fn();
+    readExtFile('/home/andrea/Documentos/Bootcamp Laboratoria/DEV009-md-links/test_files/file1.text')
+    expect(readFile).toHaveBeenCalled();
+  })
 })
