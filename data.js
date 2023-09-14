@@ -13,9 +13,19 @@ function convertToAbsolutePath(pathReceived){
 }
 
 function readExtFile(pathReceived){
-    //
+    const validExt = [
+        '.md', '.mkd', '.mdwn', '.mdown',
+        '.mdtxt', '.mdtext', '.markdown', '.text'
+    ]
+    const fileName = path.basename(pathReceived);
+ return new Promise((resolve,reject) =>{
+    if (validExt.includes(path.extname(fileName))){
+        resolve(pathReceived);
+    }else reject ('El archivo no es md');
+ })
+    
 }
 
 
 
-module.exports = convertToAbsolutePath;
+module.exports = { convertToAbsolutePath, readExtFile }
