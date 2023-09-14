@@ -20,12 +20,19 @@ function readExtFile(pathReceived){
     const fileName = path.basename(pathReceived);
  return new Promise((resolve,reject) =>{
     if (validExt.includes(path.extname(fileName))){
-        resolve(pathReceived);
+        resolve();
     }else reject ('El archivo no es md');
  })
     
 }
 
+function readMarkdownFile (pathFile){
+   fs.readFile(pathFile,'utf8',(err,data)=>{
+        if(err) throw err;
+        console.log(data);
+    })
+}
 
 
-module.exports = { convertToAbsolutePath, readExtFile }
+
+module.exports = { convertToAbsolutePath, readExtFile, readMarkdownFile }

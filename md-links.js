@@ -1,13 +1,14 @@
 
-const {convertToAbsolutePath, readExtFile }= require('./data');
+const {convertToAbsolutePath, readExtFile, readMarkdownFile }= require('./data');
 
 
 //Crear la funcion mdLinks
 const mdLinks = (pathReceived) => {
 return new Promise (function(resolve,reject){
  convertToAbsolutePath(pathReceived).then((absolutePath)=>{
-  resolve (readExtFile(absolutePath).then((pathMarkdownFile)=>{
-    return pathMarkdownFile;
+  filePath = absolutePath;
+  resolve (readExtFile(absolutePath).then(()=>{
+    readMarkdownFile (filePath);
   }));
  }).catch((error) => reject(error));
 });
