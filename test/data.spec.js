@@ -1,4 +1,4 @@
-const convertToAbsolutePath = require('../data.js');
+const { convertToAbsolutePath, readExtFile, readMarkdownFile } = require('../data.js');
 
 const rutas = [
     '../DEV009-social-network/README.md',
@@ -11,8 +11,8 @@ const rutas = [
 
 describe('convertToAbsolutePath', () => {
     it('should reject promise if path does not exist', () => {
-      return convertToAbsolutePath('./esta/ruta/noexiste.md').catch((error)=>{
-        expect(error).toBe('No existe la ruta');
+      return convertToAbsolutePath('./esta/ruta/noexiste.md').catch((err)=>{
+        expect(err).toBe('No existe la ruta');
       })
     });
     it('should return an absolut path', () => {
@@ -21,4 +21,20 @@ describe('convertToAbsolutePath', () => {
         })
       });
 
-});
+})
+
+describe('readExtFile', ()=>{
+  it('shoud return true for files whit extention valid',()=>{
+    return readExtFile('/home/andrea/Documentos/Bootcamp Laboratoria/DEV009-md-links/test_files/file1.text').then((result)=>{
+      expect(result).toBe(true);
+    })
+
+  });
+
+  it('shoud return "El archivo no es md" for files whit extention not valid',()=>{
+    return readExtFile('/home/andrea/Documentos/Bootcamp Laboratoria/DEV009-md-links/index.js').catch((err)=>{
+      expect(err).toBe('El archivo no es md');
+    })
+
+  });
+})
