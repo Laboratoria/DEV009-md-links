@@ -1,42 +1,54 @@
-const fs = require ('fs');
+const fs = require('node:fs');
 const path = require('node:path');
-const { searchMdFiles } = require('./data.js');
+const { searchMdFiles, readdingFile, searchLinks } = require('./data.js');
 
-function mdLinks (filePath, options) {
+
+function mdLinks(filePath, options) {
   return new Promise((resolve, reject) => {
-    if(fs.existsSync(filePath)){ // archivo existe
-      if(!path.isAbsolute(filePath)){ // chequea que no sea relativo
-        filePath = path.resolve(filePath); //si es relativo, hay que transformarlo en absoluto con path.resolve()
+    if (fs.existsSync(filePath)) {
+      if (!path.isAbsolute(filePath)) {
+        filePath = path.resolve(filePath);
       }
-        console.log(filePath);
-         if(searchMdFiles(filePath)){
-          resolve('el archivo es md');
-         }   else {
-          reject('el archivo no es md');  //comprobar si archivo es md
-         }           
-
+      if (!searchMdFiles(filePath)) {
+        reject('El archivo no es Markdown');
+        return;
+      }
+      readdingFile(filePath)
+        .then((fileData) => {
+        
+          const links = searchLinks(fileData,filePath);
+          console.log(links,'links');
+          /*if (links.length > 0) {
+            resolve(links);
+          } else {
+            reject('No hay links en el archivo');
+          }*/
+        })
+        .catch((error) => {
+          reject(error);
+        });
     } else {
-      reject('La ruta no existe'); // rechazar la promesa"la ruta no existe"
+      reject('La ruta no existe');
     }
-   
-    
+  });
+}
+
     // comprobar si la ruta existe
-    
+
     // promesa debe retornar un objeto con:
     // href: URL encontrada.
     // text: Texto que aparecía dentro del link.
     // file: Ruta del archivo donde se encontró el link.
-    
-  })
-}
 
-mdLinks('./README.md')
-.then((resolve)=>{
-console.log(resolve);
-})
-.catch((reject)=>{
-console.log(reject);
-})
-module.exports = () => {
-  // ...
-};
+
+    mdLinks('./docs/archivos.md')
+     /* .then((resolve) => {
+        console.log(resolve);
+      })
+      .catch((reject) => {
+        console.log(reject);
+      })*/
+
+    module.exports = () => {
+      // ...
+    };
