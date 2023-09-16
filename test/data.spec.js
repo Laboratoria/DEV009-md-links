@@ -1,5 +1,5 @@
 const axios = require('axios');
-const {pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory  } = require('../data');
+const {pathExists, verifyMarkdown, readFileContent, extractLinks, validateLinks, directoryExists, isDirectory,seeStats  } = require('../data');
 let colors = require('colors');
 const fs = require('fs');
 
@@ -156,3 +156,31 @@ describe('Directory Check', () => {
   });
 });
 
+
+// Ejemplo de datos de prueba
+const mockData = [
+  {
+    href: 'https://example.com',
+    text: 'Example',
+    status: 200,
+    ok: 'ok',
+  },
+  {
+    href: 'https://google.com',
+    text: 'Google',
+    status: 404,
+    ok: 'fail',
+  },
+  // Agrega más datos de prueba según sea necesario
+];
+
+describe('seeStats', () => {
+  it('debería calcular estadísticas correctamente', () => {
+    const stats = seeStats(mockData);
+
+    // Comprueba que las estadísticas se calculen correctamente
+    expect(stats.Total).toBe(2);
+    expect(stats.Unique).toBe(2);
+    expect(stats.Broken).toBe(1); // Debe haber 1 enlace roto
+  });
+});

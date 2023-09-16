@@ -138,14 +138,21 @@ const handleError = (error) => {
     case 'The route does not exist.':
       console.error(colors.red('Error: The provided path does not exist. Please provide a valid path.'));
       break;
-    case 'The argument must be a string.':
-      console.error(colors.red('Error: The argument is not a string.'));
-      break;
     case 'The file is not a Markdown (.md).':
       console.error(colors.red('Error: The file is not a Markdown.'));
       default:
       console.error(error);
   }
 };
+function seeStats(result) {
+  const stats = {
+    'Total': result.length,
+    'Unique': new Set(result.map((link) => link.href)).size,
+    'Broken': result.filter((link) => link.ok === 'fail' || link.ok === 'No Response').length, // Contar tanto 'fail' como 'No Response'
+  };
 
-module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError};
+  return stats;
+}
+
+
+module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError,seeStats};

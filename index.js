@@ -20,7 +20,21 @@ const mdLinks = (directoryPath, validate) => {
             filePromises.push(
               readFileContent(filePath)
                 .then((fileContent) => extractLinks(fileContent, filePath))
-                .then((links) => (validate ? validateLinks(links) : links))
+                .then((links) => {
+                  if (validate) {
+                    return validateLinks(links)
+                      .then((validatedLinks) => {
+                        // Actualizar la propiedad "ok" en función de la validación
+                        return validatedLinks.map((link) => ({
+                          ...link,
+                          ok: link.ok === 'ok' ? 'ok' : 'fail',
+                        }));
+                      });
+                  } else {
+                    // Si no se requiere validación, mantener la propiedad "ok" como está
+                    return links;
+                  }
+                })
             );
           }
         });
@@ -39,5 +53,6 @@ const mdLinks = (directoryPath, validate) => {
       });
   });
 };
+
 
 module.exports = { mdLinks };

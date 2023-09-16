@@ -1,17 +1,15 @@
-const { mdLinks } = require('../mdlinks');
+const { mdLinks } = require('../index.js');
 
 describe('mdLinks Function - Promise.all', () => {
     it('Should resolve with an array of links when all filePromises resolve', () => {
-      // Simula que pathExists e isDirectory resuelven correctamente
+      // Simula que pathExists y tambien is Directory resuelven correctamente
       jest.mock('../data.js', () => ({
         pathExists: jest.fn().mockResolvedValue(),
         isDirectory: jest.fn().mockResolvedValue(),
-        // Resto de simulaciones aquí...
       }));
+
   
-      // Resto de simulaciones aquí...
-  
-      const directoryPath = './data_testing/validDirectory';
+      const directoryPath = '../directory';
   
       return mdLinks(directoryPath, false).then((result) => {
         // Verifica aquí el resultado esperado cuando todas las promesas se resuelven

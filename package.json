@@ -10,7 +10,7 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "test": "jest --coverage" ,
+    "test": "jest --coverage",
     "eslint": "eslint --ext .js"
   },
   "bin": {
@@ -24,7 +24,8 @@
     "axios": "^1.5.0",
     "colors": "^1.4.0",
     "markdown-it": "^13.0.1",
-    "marked": "^8.0.0"
+    "marked": "^8.0.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "jest": "^29.6.4",
