@@ -20,6 +20,7 @@ const cli = (path, argv) => {
 
   mdLinks(path, options)
     .then((result) => {
+      console.log(result);
       if (argv.includes("--stats") && argv.includes("--validate")) {
         const stats = {
           ...seeStats(result, validOptions),
