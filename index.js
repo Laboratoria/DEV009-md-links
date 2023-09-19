@@ -18,11 +18,11 @@ function mdLinks(filePath, options) {
         
           const links = searchLinks(fileData,filePath);
           console.log(links,'links');
-          /*if (links.length > 0) {
+          if (links.length > 0) {
             resolve(links);
           } else {
             reject('No hay links en el archivo');
-          }*/
+          }
         })
         .catch((error) => {
           reject(error);
@@ -33,15 +33,9 @@ function mdLinks(filePath, options) {
   });
 }
 
-    // comprobar si la ruta existe
-
-    // promesa debe retornar un objeto con:
-    // href: URL encontrada.
-    // text: Texto que aparecía dentro del link.
-    // file: Ruta del archivo donde se encontró el link.
 
 
-    mdLinks('./docs/archivos.md')
+    mdLinks('./docs/archivostest.doc')
      /* .then((resolve) => {
         console.log(resolve);
       })

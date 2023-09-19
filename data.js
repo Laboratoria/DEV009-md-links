@@ -28,16 +28,19 @@ function readdingFile(filePath) {
   //función que busca links en archivo y encuentra href, text y file
   function searchLinks (data,filePath) {
     const regExp = RegExp( /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g); //guarda url del link
-    // const describeText = []; //texto descriptivo dentro de [] antes de url
     const links = [];
    if(regExp.test(data)){
     const foundLinks=data.match(regExp)
     console.log(foundLinks,'foundlinks');
     foundLinks.forEach(link => {
+      const linkParts = link.slice(1, -1).split('](');
+      const text = linkParts[0]; // texto descriptivo dentro de []
+      const href = linkParts[1]; // URL dentro de ()
+
       console.log(link);
       links.push({
-        text:'',
-        href:'',
+        text:text,
+        href:href,
         file:filePath,
       })
     });
