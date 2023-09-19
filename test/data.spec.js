@@ -1,5 +1,5 @@
 const axios = require('axios');
-const {pathExists, verifyMarkdown, readFileContent, extractLinks, validateLinks, directoryExists, isDirectory,seeStats  } = require('../data');
+const {pathExists, verifyMarkdown, readFileContent, extractLinks, validateLinks, directoryExists, isDirectory, handleError, seeStats  } = require('../data');
 let colors = require('colors');
 const fs = require('fs');
 
@@ -155,6 +155,45 @@ describe('Directory Check', () => {
     });
   });
 });
+
+
+describe('handleError', () => {
+  // Mockear la función de console.error para capturar los mensajes de error.
+  let consoleErrorSpy;
+
+  beforeEach(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('should handle "The route does not exist." error correctly', () => {
+    const error = new Error('The route does not exist.');
+    handleError(error);
+
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(colors.red('Error: The provided path does not exist. Please provide a valid path.'));
+  });
+
+  it('should handle "The file is not a Markdown (.md)." error correctly', () => {
+    const error = new Error('The file is not a Markdown (.md).');
+    handleError(error);
+
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(colors.red('Error: The file is not a Markdown.'));
+  });
+
+  it('should handle other errors with the default message', () => {
+    const error = new Error('Some other error message.');
+    handleError(error);
+
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+  });
+});
+
 
 describe('seeStats', () => {
   test('calculates stats correctly', () => {

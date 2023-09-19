@@ -62,7 +62,6 @@ const readDir = (dir) => {
   return mdFiles;
 }
 
-
 const extractLinks = ({ absolutePath, data }) => {
   const md = new MarkdownIt();
 
