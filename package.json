@@ -1,11 +1,42 @@
 {
-  "name": "md-links",
+  "name": "md-links-camim",
   "version": "0.1.0",
+  "description": "Validates links, providing with status and information about validating, including broken links.",
+  "main": "index.js",
+  "authors": [
+    "Camila Mamani,<camilamcr97@gmail.com>"
+  ],
   "engines": {
     "node": ">=16.x"
   },
+  "scripts": {
+    "pretest": "echo \"Preparing tests...\"",
+    "test": "jest --coverage",
+    "eslint": "eslint --ext .js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CAMIANAIS/DEV009-md-links"
+  },
+  "bin": {
+    "md-links": "./cli.js"
+  },
+  "files": [
+    "./npm.md"
+  ],
   "bootcamp": {
     "createdAt": "2023-08-22T22:00:38.678Z",
     "commit": "24f5a51ee0a15f345b59fcd2ef44c3616abdfce5"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "colors": "^1.4.0",
+    "markdown-it": "^13.0.1",
+    "marked": "^8.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^29.6.4",
+    "jest-environment-jsdom": "^29.6.4"
   }
 }
