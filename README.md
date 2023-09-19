@@ -21,8 +21,7 @@ Estos archivos `Markdown` normalmente contienen _links_ (vínculos/ligas) que
 muchas veces están rotos o ya no son válidos y eso perjudica mucho el valor de
 la información que se quiere compartir.
 
-Se ha creado unaherramienta usando [Node.js](https://nodejs.org/), que lea y 
-analice archivos en formato `Markdown`, para verificar los links que contengan y reportar
+Se ha creado una herramienta usando [Node.js](https://nodejs.org/), que lea y analice archivos en formato `Markdown`, para verificar los links que contengan y reportar
 algunas estadísticas.
 
 ## 2. Resumen del proyecto
@@ -42,8 +41,9 @@ Manager).
 
 ## 3. Documentación técnica de la libreria
 
-  En este proyecto se hizo uso de Los módulos CommonJS usan la síntaxis `require`, también la librería Markadown-it.
-  Además,se configuró Jest para realizar los test unitarios.
+  En este proyecto se hizo uso de Los módulos CommonJS usan la síntaxis `require`, también la librería `Markdown-it`.
+
+  Además,se configuró Jest para realizar los test unitarios,se utilizó el matcher `.resolves` en su declaración de expect y Jest esperará a que esa promesa resuelva. Si se rechaza la promesa, la prueba fallará automáticamente.
 
   Se evitó el uso de la función síncrona `readFileSync` para leer archivos. En su lugar, se hizo de manera asíncrona utilizando `readFile`. 
 
