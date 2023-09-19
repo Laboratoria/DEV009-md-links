@@ -47,7 +47,7 @@ Manager).
 
   Se evitó el uso de la función síncrona `readFileSync` para leer archivos. En su lugar, se hizo de manera asíncrona utilizando `readFile`. 
 
-  Se utilizó el módulo `fs/promises`, podrás utilizar la versión promisificada de las funciones como `readFile`
+  Se utilizó el módulo `fs/promises`, podrás utilizar la versión promisificada de las funciones como `readFile`.
 
   Al momento de usar recursividad, se utilizó la versión síncrona de la función para leer directorios, `readdirSync`.
 
