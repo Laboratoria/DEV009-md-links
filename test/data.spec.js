@@ -96,8 +96,8 @@ describe('validateLinks', () => {
     ];
 
     // Configura el comportamiento de Axios cuando se llama axios.get
-    axios.get.mockResolvedValue({ status: 200 });
-
+    //axios.get.mockResolvedValue({ status: 200 });
+    jest.spyOn(axios,'get').mockResolvedValue({ status: 200 });
     // Llama a la función que deseas probar
     return validateLinks(links).then((validatedLinks) => {
       // Verifica que los enlaces validados tengan los valores esperados
@@ -156,31 +156,37 @@ describe('Directory Check', () => {
   });
 });
 
-
-// Ejemplo de datos de prueba
-const mockData = [
-  {
-    href: 'https://example.com',
-    text: 'Example',
-    status: 200,
-    ok: 'ok',
-  },
-  {
-    href: 'https://google.com',
-    text: 'Google',
-    status: 404,
-    ok: 'fail',
-  },
-  // Agrega más datos de prueba según sea necesario
-];
-
 describe('seeStats', () => {
-  it('debería calcular estadísticas correctamente', () => {
-    const stats = seeStats(mockData);
+  test('calculates stats correctly', () => {
+    const result = [
+      { href: 'http://example.com' },
+      { href: 'http://example2.com' },
+      { href: 'http://example3.com' },
+      { href: 'http://example4.com' },
+    ];
 
-    // Comprueba que las estadísticas se calculen correctamente
-    expect(stats.Total).toBe(2);
-    expect(stats.Unique).toBe(2);
-    expect(stats.Broken).toBe(1); // Debe haber 1 enlace roto
+    const stats = seeStats(result);
+
+    // Debes ajustar estas expectativas según los datos de prueba
+    expect(stats).toEqual({
+      Total: 4,
+      Unique: 4,
+    });
+  });
+
+  test('calculates stats correctly with duplicate hrefs', () => {
+    const result = [
+      { href: 'http://example.com' },
+      { href: 'http://example.com' },
+      { href: 'http://example2.com' },
+    ];
+
+    const stats = seeStats(result);
+
+    // Debes ajustar estas expectativas según los datos de prueba
+    expect(stats).toEqual({
+      Total: 3,
+      Unique: 2,
+    });
   });
 });

@@ -3,6 +3,7 @@ const path = require('path');
 const MarkdownIt = require('markdown-it');
 const axios = require('axios');
 let colors = require('colors');
+const options = ["--validate", "--stats"];
 
 const pathExists = (absolutePath) => {
   return new Promise((resolve, reject) => {
@@ -41,6 +42,26 @@ function readFileContent(absolutePath) {
     });
   });
 }
+// Función para leer directorios y subdirectorios
+const readDir = (dir) => {
+  const entities = fs.readdirSync(dir);
+  let mdFiles = [];
+
+  entities.forEach(entity => {
+    const fullPath = path.join(dir, entity);
+    const entityStats = fs.statSync(fullPath);
+
+    if (entityStats.isFile() && entity.endsWith('.md')) {
+      mdFiles.push(fullPath);
+    } else if (entityStats.isDirectory()) {
+      // Recursion
+      mdFiles = mdFiles.concat(readDir(fullPath));
+    }
+  });
+
+  return mdFiles;
+}
+
 
 const extractLinks = ({ absolutePath, data }) => {
   const md = new MarkdownIt();
@@ -144,15 +165,15 @@ const handleError = (error) => {
       console.error(error);
   }
 };
+
 function seeStats(result) {
   const stats = {
     'Total': result.length,
     'Unique': new Set(result.map((link) => link.href)).size,
-    'Broken': result.filter((link) => link.ok === 'fail' || link.ok === 'No Response').length, // Contar tanto 'fail' como 'No Response'
   };
-
   return stats;
 }
+
 
 
 module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError,seeStats};

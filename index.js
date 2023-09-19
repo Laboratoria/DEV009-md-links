@@ -11,33 +11,37 @@ const mdLinks = (directoryPath, validate) => {
       .then(() => {
         const filePromises = [];
 
-        const files = fs.readdirSync(absolutePath);
+        const exploreDirectory = (dir) => {
+          const files = fs.readdirSync(dir);
 
-        files.forEach((file) => {
-          const filePath = path.join(absolutePath, file);
+          files.forEach((file) => {
+            const filePath = path.join(dir, file);
 
-          if (isMarkdownFile(filePath)) {
-            filePromises.push(
-              readFileContent(filePath)
-                .then((fileContent) => extractLinks(fileContent, filePath))
-                .then((links) => {
-                  if (validate) {
-                    return validateLinks(links)
-                      .then((validatedLinks) => {
-                        // Actualizar la propiedad "ok" en función de la validación
-                        return validatedLinks.map((link) => ({
-                          ...link,
-                          ok: link.ok === 'ok' ? 'ok' : 'fail',
-                        }));
-                      });
-                  } else {
-                    // Si no se requiere validación, mantener la propiedad "ok" como está
-                    return links;
-                  }
-                })
-            );
-          }
-        });
+            if (isMarkdownFile(filePath)) {
+              filePromises.push(
+                readFileContent(filePath)
+                  .then((fileContent) => extractLinks(fileContent, filePath))
+                  .then((links) => {
+                    if (validate) {
+                      return validateLinks(links)
+                        .then((validatedLinks) => {
+                          return validatedLinks.map((link) => ({
+                            ...link,
+                            ok: link.ok === 'ok' ? 'ok' : 'fail',
+                          }));
+                        });
+                    } else {
+                      return links;
+                    }
+                  })
+              );
+            } else if (fs.statSync(filePath).isDirectory()) {
+              exploreDirectory(filePath); // Llamada recursiva para explorar subdirectorios
+            }
+          });
+        };
+
+        exploreDirectory(absolutePath); // Comienza la exploración desde el directorio raíz
 
         Promise.all(filePromises)
           .then((resultArrays) => {
@@ -49,10 +53,9 @@ const mdLinks = (directoryPath, validate) => {
           });
       })
       .catch((error) => {
-        reject(error);
+        reject(new Error(`${error.message}`));
       });
   });
 };
-
 
 module.exports = { mdLinks };
