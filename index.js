@@ -1,76 +1,70 @@
 const fs = require('fs');
 const path = require('path');
-const { extractLinks, isMarkdownFile, readFileContent, validateLinks, pathExists, isDirectory } = require('./data.js');
+const {
+  extractLinks,
+  isMarkdownFile,
+  readFileContent,
+  validateLinks,
+  pathExists,
+  isDirectory,
+  readDir
+} = require('./data.js');
 
-const mdLinks = (directoryPath, validate) => {
+const mdLinks = (directoryPath, options = {}) => {
   const absolutePath = path.resolve(directoryPath);
 
   return new Promise((resolve, reject) => {
-    // Verificar si el camino es un archivo
-    if (!fs.existsSync(absolutePath)) {
+    // Verificar si el camino es un archivo o directorio
+    if (!pathExists(absolutePath)) {
       reject(new Error('The path is not a valid directory or file.'));
       return;
     }
 
-    // Verificar si el camino es un directorio
-    if (fs.statSync(absolutePath).isDirectory()) {
-      const filePromises = [];
+    if (isDirectory(absolutePath)) {
+      // Si es un directorio, obten todos los archivos .md
+      const mdFiles = readDir(absolutePath, isMarkdownFile);
 
-      const exploreDirectory = (dir) => {
-        const files = fs.readdirSync(dir);
+      if (mdFiles.length === 0) {
+        reject(new Error('No Markdown files found in the directory or subdirectories.'));
+        return;
+      }
 
-        files.forEach((file) => {
-          const filePath = path.join(dir, file);
-
-          if (isMarkdownFile(filePath)) {
-            filePromises.push(
-              readFileContent(filePath)
-                .then((fileContent) => extractLinks(fileContent, filePath))
-                .then((links) => {
-                  if (validate) {
-                    return validateLinks(links)
-                      .then((validatedLinks) => {
-                        return validatedLinks.map((link) => ({
-                          ...link,
-                          ok: link.ok === 'ok' ? 'ok' : 'fail',
-                        }));
-                      });
-                  } else {
-                    return links;
-                  }
-                })
-            );
-          } else if (fs.statSync(filePath).isDirectory()) {
-            exploreDirectory(filePath); // Llamada recursiva para explorar subdirectorios
-          }
-        });
-      };
-
-      exploreDirectory(absolutePath); // Comienza la exploración desde el directorio raíz
+      // Loop a través de todos los archivos Markdown.
+      const filePromises = mdFiles.map(mdFile => {
+        return readFileContent(mdFile)
+          .then(fileContent => extractLinks(fileContent, mdFile))
+          .then(links => {
+            if (options.validate) {
+              return validateLinks(links);
+            } else {
+              return links;
+            }
+          });
+      });
 
       Promise.all(filePromises)
-        .then((resultArrays) => {
+        .then(resultArrays => {
           const allLinks = resultArrays.flat();
           resolve(allLinks);
         })
-        .catch((error) => {
+        .catch(error => {
           reject(error);
         });
     } else {
       // Si el camino es un archivo, procesarlo directamente
       readFileContent(absolutePath)
-        .then((fileContent) => extractLinks(fileContent, absolutePath))
-        .then((links) => {
-          if (validate) {
-            return validateLinks(links)
-              .then((validatedLinks) => {
-                resolve(validatedLinks);
-              });
+        .then(fileContent => extractLinks(fileContent, absolutePath))
+        .then(links => {
+          if (options.validate) {
+            return validateLinks(links);
           } else {
-            resolve(links);
+            return links;
           }
         })
-        .catch((error) => {
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
           reject(error);
         });
     }

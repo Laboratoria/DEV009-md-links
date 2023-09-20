@@ -36,7 +36,7 @@ desde el terminal.
 Se puede instalar esta librería utilizando NPM (Node Package
 Manager).
 
-```npm install md-links-camim```
+```npm install CAMIANAIS/DEV009-md-links```
 
 
 ## 3. Documentación técnica de la libreria
@@ -191,7 +191,7 @@ Broken: 3
 Se puede instalar esta librería utilizando NPM (Node Package
 Manager).
 
-```npm install md-links-camim```
+``` npm install CAMIANAIS/DEV009-md-links```
 
 ## 6. Planificación del proyecto
 

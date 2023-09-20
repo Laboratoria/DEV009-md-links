@@ -1,5 +1,5 @@
 {
-  "name": "md-links-camim",
+  "name": "@CAMIANAIS/md-links",
   "version": "0.1.0",
   "description": "Validates links, providing with status and information about validating, including broken links.",
   "main": "index.js",

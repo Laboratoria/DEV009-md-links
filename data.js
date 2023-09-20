@@ -173,4 +173,4 @@ function seeStats(result) {
   };
   return stats;
 }
-module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError,seeStats};
+module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError,seeStats, readDir};
