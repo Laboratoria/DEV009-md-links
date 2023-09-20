@@ -77,5 +77,4 @@ const mdLinks = (directoryPath, validate) => {
   });
 };
 
-
 module.exports = { mdLinks };

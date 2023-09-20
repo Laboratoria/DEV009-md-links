@@ -42,6 +42,7 @@ function readFileContent(absolutePath) {
     });
   });
 }
+// ------------ Verificación de directorios-------------------
 // Función para leer directorios y subdirectorios
 const readDir = (dir) => {
   const entities = fs.readdirSync(dir);
@@ -172,7 +173,4 @@ function seeStats(result) {
   };
   return stats;
 }
-
-
-
 module.exports = { pathExists, isMarkdownFile, verifyMarkdown, readFileContent, extractLinks, validateLinks, validateUrl, directoryExists, isDirectory, handleError,seeStats};

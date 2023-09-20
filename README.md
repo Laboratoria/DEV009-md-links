@@ -36,7 +36,7 @@ desde el terminal.
 Se puede instalar esta librería utilizando NPM (Node Package
 Manager).
 
-```npm install md-links camim```
+```npm install md-links-camim```
 
 
 ## 3. Documentación técnica de la libreria
@@ -158,7 +158,7 @@ Obtendremos un arreglo de objetos con las propiedades:
 
 Ejecutar --> `md-links ./directory --stats`
 
-Al utilizar esta opción, podrás obtener estadísticas relacionadas con los enlaces presentes en los archivos Markdown.
+Al utilizar esta opción, podrás obtener estadísticas (conteo y tambien saber cuantos links no se repiten) relacionadas con los enlaces presentes en los archivos Markdown.
 
 ```sh
 $ md-links ./directory --stats
@@ -191,7 +191,7 @@ Broken: 3
 Se puede instalar esta librería utilizando NPM (Node Package
 Manager).
 
-```npm install md-links camim```
+```npm install md-links-camim```
 
 ## 6. Planificación del proyecto
 
@@ -199,6 +199,9 @@ Se planifico el proyecto haciendo uso de milestones e issues con GitHub.
 ![milestones](./img/MILESTONES.png)
 ![board](./img/board.png)
 
+Se siguió el proceso por hitos, y mediante el uso de diagramas de flujo.
+![flujo1](./img/flujo1.jpg)
+![flujo2](./img/flujo2.jpg)
 
 
 
