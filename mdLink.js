@@ -40,9 +40,40 @@ const findLinksInMarkdown = (markdownContent) => {
   return links;
 };
 
+const mdLink = (filePath) => {
+  return new Promise((resolve, reject) => {
+    // Comprobar que la ruta existe
+    if (!pathExists(filePath)) {
+      reject('La ruta no existe');
+      return;
+    }
+
+    // Asegurar que el archivo es Markdown
+    if (!isMarkdownFile(filePath)) {
+      reject('El archivo no es Markdown');
+      return;
+    }
+
+    // Leer el archivo Markdown
+    readMarkdownFile(filePath)
+      .then((data) => {
+        // Encontrar los links dentro del documento
+        const links = findLinksInMarkdown(data);
+
+        // Resolver el contenido completo y los enlaces encontrados
+        resolve({ content: data, links });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 module.exports = {
   pathExists,
   isMarkdownFile,
   readMarkdownFile,
   findLinksInMarkdown,
+  mdLink,
 };
+

@@ -1,24 +1,19 @@
-// // const {  } = require('../index.js');
-// const { mdLink } = require('../mdLink.js');
+const { mdLink } = require('../index.js'); // Asegúrate de que la ruta sea correcta
 
+describe('mdLink function', () => {
+  // Prueba básica para verificar si mdLink retorna un arreglo de objetos
+  test('should return an array of link objects', async () => {
+    const links = await mdLink('C:/Users/Laboratoria/Desktop/mdlinks/DEV009-md-links/miPrueba.md');
+    
+    expect(Array.isArray(links)).toBe(true);
+    
+    // Verifica que cada elemento en el arreglo sea un objeto con propiedades href, text y file
+    links.forEach((link) => {
+      expect(link).toHaveProperty('href');
+      expect(link).toHaveProperty('text');
+      expect(link).toHaveProperty('file');
+    });
+  });
 
-// describe('mdLinks', () => {
-//   it('debería devolver  propiedades href, text y file', (done) => {
-//     const filePath = 'ruta/a/tu/archivo.md'; // Ruta a un archivo existente con enlaces
-//     mdLinks(filePath)
-//       .then((links) => {
-//         expect(Array.isArray(links)).toBe(true);
-//         expect(links.length).toBeGreaterThan(0);
-
-//         links.forEach((link) => {
-//           expect(link).toHaveProperty('href');
-//           expect(link).toHaveProperty('text');
-//           expect(link).toHaveProperty('file');
-//         });
-
-//         done(); // Indica que el test ha terminado
-//       })
-//       .catch((error) => {
-//         done(error); 
-//       });
-//   });
+  // Agrega más pruebas según sea necesario para verificar el comportamiento esperado de mdLink.
+});

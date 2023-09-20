@@ -3,6 +3,7 @@ const path = require('path');
 const { pathExists, isMarkdownFile, readMarkdownFile, findLinksInMarkdown } = require('./mdLink.js');
 
 const fileName = 'miPrueba.md'; 
+// const fileName = 'prueba.txt'; 
 const filePath = path.resolve(fileName);
 
 const mdLink = (filePath) => {
