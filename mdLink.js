@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 
 // Comprobar que la ruta existe
 const pathExists = (filePath) => {
@@ -40,33 +41,21 @@ const findLinksInMarkdown = (markdownContent) => {
   return links;
 };
 
-const mdLink = (filePath) => {
-  return new Promise((resolve, reject) => {
-    // Comprobar que la ruta existe
-    if (!pathExists(filePath)) {
-      reject('La ruta no existe');
-      return;
-    }
-
-    // Asegurar que el archivo es Markdown
-    if (!isMarkdownFile(filePath)) {
-      reject('El archivo no es Markdown');
-      return;
-    }
-
-    // Leer el archivo Markdown
-    readMarkdownFile(filePath)
-      .then((data) => {
-        // Encontrar los links dentro del documento
-        const links = findLinksInMarkdown(data);
-
-        // Resolver el contenido completo y los enlaces encontrados
-        resolve({ content: data, links });
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+// Función para validar un enlace utilizando Axios
+const validateLink = (link) => {
+  return axios.head(link.href)
+    .then((response) => {
+      // Agrega las propiedades status y ok al objeto de enlace
+      link.status = response.status;
+      link.ok = response.statusText === 'OK';
+      return link;
+    })
+    .catch((error) => {
+      // En caso de error, agrega las propiedades status y ok al objeto de enlace con un mensaje de fallo
+      link.status = error.response ? error.response.status : 'N/A';
+      link.ok = false;
+      return link;
+    });
 };
 
 module.exports = {
@@ -74,6 +63,5 @@ module.exports = {
   isMarkdownFile,
   readMarkdownFile,
   findLinksInMarkdown,
-  mdLink,
+  validateLink,
 };
-

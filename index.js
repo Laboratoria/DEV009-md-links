@@ -1,20 +1,15 @@
-const fs = require('fs');
 const path = require('path');
-const { pathExists, isMarkdownFile, readMarkdownFile, findLinksInMarkdown } = require('./mdLink.js');
+const { pathExists, isMarkdownFile, readMarkdownFile, findLinksInMarkdown, validateLink } = require('./mdLink.js');
 
-const fileName = 'miPrueba.md'; 
-// const fileName = 'prueba.txt'; 
-const filePath = path.resolve(fileName);
-
-const mdLink = (filePath) => {
+const mdLink = (filePath, validate = false) => {
   return new Promise((resolve, reject) => {
-    // aqui se comprueba que la ruta existe
+    // Comprobar que la ruta existe
     if (!pathExists(filePath)) {
       reject('La ruta no existe');
       return;
     }
 
-    // Asegurar que el archivo es markdown
+    // Asegurar que el archivo es Markdown
     if (!isMarkdownFile(filePath)) {
       reject('El archivo no es Markdown');
       return;
@@ -23,11 +18,23 @@ const mdLink = (filePath) => {
     // Leer el archivo Markdown
     readMarkdownFile(filePath)
       .then((data) => {
-        // voy a encontrar los links dentro del documento
+        // Encontrar los links dentro del documento
         const links = findLinksInMarkdown(data);
 
-        // vamos a resolver  el contenido completo y los enlaces encontrados
-        resolve({ content: data, links });
+        if (validate) {
+          // Si se desea validar, realizar la validación de cada enlace
+          const linkPromises = links.map((link) => validateLink(link));
+          Promise.all(linkPromises)
+            .then((validatedLinks) => {
+              resolve(validatedLinks);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        } else {
+          // Si no se desea validar, resolver solo los enlaces encontrados
+          resolve(links);
+        }
       })
       .catch((error) => {
         reject(error);
@@ -35,29 +42,22 @@ const mdLink = (filePath) => {
   });
 };
 
-// Llamamos a la función mdLink con la ruta del archiv
-mdLink(filePath)
-  .then(({ content, links }) => {
-    
-    console.log('Contenido del archivo:');
-    console.log(content);
+const fileName = 'miPrueba.md'; // Cambia el nombre del archivo si es necesario
+const filePath = path.resolve(fileName);
 
-
-    console.log('\nEnlaces encontrados:');
+// Llamamos a la función mdLink con la ruta del archivo y opcionalmente con validate = true
+mdLink(filePath, true)
+  .then((links) => {
+    console.log('Enlaces encontrados con validación:');
     links.forEach((link) => {
       console.log(`href: ${link.href}`);
       console.log(`text: ${link.text}`);
       console.log(`file: ${filePath}`);
-      console.log(); 
+      console.log(`status: ${link.status}`);
+      console.log(`ok: ${link.ok}`);
+      console.log();
     });
-
-    // Retorna el contenido completo y los enlaces encontrados
-    return { content, links };
   })
   .catch((error) => {
     console.error(error);
   });
-
-  module.exports = {
-    mdLink
-  };
