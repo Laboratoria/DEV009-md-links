@@ -29,14 +29,19 @@ function fn_getLinks(file) {
     let match;
 
     fs.readFile(file, (err, data) => {
-      while ((match = linkRegex.exec(data)) !== null) { 
-        links.push({
-          href: match[2],
-          text: match[1],
-          file: file,
-        });
+      if (err) {
+        reject(err);
+      } else {
+        while ((match = linkRegex.exec(data)) !== null) {
+          links.push({
+            href: match[2],
+            text: match[1],
+            file: file,
+          });
+        }
       }
       resolve(links);
+      console.log(links, "esto")
     });
   });
 }
