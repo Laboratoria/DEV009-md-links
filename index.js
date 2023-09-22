@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { searchMdFiles, readdingFile, searchLinks } = require('./data.js');
+const { searchMdFiles, readdingFile, searchLinks, validateUrl } = require('./data.js');
 
 
 function mdLinks(filePath, options) {
@@ -18,11 +18,12 @@ function mdLinks(filePath, options) {
         
           const links = searchLinks(fileData,filePath);
           console.log(links,'links');
-          /*if (links.length > 0) {
-            resolve(links);
+          if (links.length > 0) {
+           resolve (validateUrl(links))
+           
           } else {
             reject('No hay links en el archivo');
-          }*/
+          }
         })
         .catch((error) => {
           reject(error);
@@ -30,25 +31,19 @@ function mdLinks(filePath, options) {
     } else {
       reject('La ruta no existe');
     }
-  });
-}
+    
+  }
 
-    // comprobar si la ruta existe
+  )}
 
-    // promesa debe retornar un objeto con:
-    // href: URL encontrada.
-    // text: Texto que aparecía dentro del link.
-    // file: Ruta del archivo donde se encontró el link.
-
-
-    mdLinks('./docs/archivos.md')
-     /* .then((resolve) => {
+    /* mdLinks('./docs/archivos.md')
+     .then((resolve) => {
         console.log(resolve);
       })
       .catch((reject) => {
         console.log(reject);
       })*/
 
-    module.exports = () => {
-      // ...
+module.exports =  { 
+      mdLinks
     };
