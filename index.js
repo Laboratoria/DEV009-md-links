@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { searchMdFiles, readdingFile, searchLinks, validateUrl } = require('./data.js');
-const { error } = require('node:console');
+
 
 function mdLinks(filePath, options) {
   return new Promise((resolve, reject) => {
@@ -19,7 +19,8 @@ function mdLinks(filePath, options) {
           const links = searchLinks(fileData,filePath);
           console.log(links,'links');
           if (links.length > 0) {
-            resolve(links);
+           resolve (validateUrl(links))
+           
           } else {
             reject('No hay links en el archivo');
           }
@@ -30,14 +31,10 @@ function mdLinks(filePath, options) {
     } else {
       reject('La ruta no existe');
     }
-    validateUrl(link.href)
-      .then(response => resolve(response))
-      console.log(response,'prueba')
-      .catch(error=> reject(error))
-      });
+    
   }
 
-
+  )}
 
     /* mdLinks('./docs/archivos.md')
      .then((resolve) => {

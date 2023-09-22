@@ -44,8 +44,6 @@ function searchLinks(data, filePath) {
         text: text,
         href: href,
         file: filePath,
-        status:'response.status',
-        statusText:'response.statusText'
       })
     });
   } else {
@@ -55,19 +53,31 @@ function searchLinks(data, filePath) {
   return links;
 }
 
-const validateUrl = (url) => {
-  return new Promise((resolve, reject) =>{
-    axios.get(url)
+const validateUrl = (links) => {
+  const urlStatus = links.map(link => {
+    return axios.get(link.href)
     .then((response) =>{
-      console.log(response)
-      resolve(response.status)
+      return {
+        text: link.text,
+        href: link.href,
+        file: link.file,
+        status: response.status,
+        statusText: 'ok',
+      }
     })
     .catch((error) => {
-      reject(error.response.status)
+      return {
+        text: link.text,
+        href: link.href,
+        file: link.file,
+        status: error.status === undefined ? 'status no encontrado' : error.status,
+        statusText: 'fail', 
+      }
     })
-
-  }
-  )
+  })
+    
+return Promise.all(urlStatus)
+  
 
 }
 
