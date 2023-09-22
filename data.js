@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { promiseHooks } = require('v8');
 const axios = require('axios');
-//const { url } = require ('inspector');
+
 
 // funcion para encontrar solo archivos Markdown
 function searchMdFiles(filePath) {
@@ -71,6 +71,24 @@ const validateUrl = (url) => {
 
 }
 
+/*const validateUrl = (url) => {
+  return new Promise((resolve, reject) => {
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          console.log('URL válida');
+          resolve(response.status);
+        } else {
+          console.log('URL no válida');
+          reject(response.status);
+        }
+      })
+      .catch((error) => {
+        console.error('Error en la solicitud:', error);
+        reject(error);
+      });
+  });
+};*/
 
 module.exports = {
   searchMdFiles,
