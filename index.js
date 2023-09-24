@@ -3,7 +3,7 @@ const path = require('node:path');
 const { searchMdFiles, readdingFile, searchLinks, validateUrl } = require('./data.js');
 
 
-function mdLinks(filePath, options) {
+function mdLinks(filePath, validate) {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(filePath)) {
       if (!path.isAbsolute(filePath)) {
@@ -17,9 +17,10 @@ function mdLinks(filePath, options) {
         .then((fileData) => {
         
           const links = searchLinks(fileData,filePath);
-          console.log(links,'links');
+          //console.log(links,'links');
           if (links.length > 0) {
            resolve (validateUrl(links))
+
            
           } else {
             reject('No hay links en el archivo');
