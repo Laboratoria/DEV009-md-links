@@ -2,6 +2,8 @@ const fs = require("fs"); // file system Este módulo proporciona funciones p/tr
 const { access, constants } = require("fs").promises; // metodo access se usa para verificar si un archivo o dir existe y
 // constants contiene constantes que representan diferentes permisos y modos de acceso en el sistema de archivos.
 const path = require("path"); // manipulacion y navegacion de rutas de archivos y directorios
+const axios = require("axios");
+const { error } = require("console");
 
 // Check if the file exists in the current directory.
 function fn_myFileExist(file) {
@@ -41,9 +43,33 @@ function fn_getLinks(file) {
         }
       }
       resolve(links);
-      console.log(links, "esto")
     });
   });
+}
+
+function fn_validateUrl(links) {  //declaramos la fn que recibe un arreglo de objetos
+  const validateLinks = links.map((link) => { //utilizamos map para iterar sobre cada objeto en el arreglo "links" y crear un nuevo arreglo validateLinks
+    
+    return axios
+    // función axios.get devolverá una promesa que puedes manejar directamente en lugar de crear una nueva promesa.
+        .get(link.href)
+        .then((response) => { //si la peticion es exitosa
+          link.status = response.status; // se le asigna el status
+          link.ok =
+            response.status >= 200 && response.status < 400 ? "ok" : "fail"; //verifica si el estado de la respuesta está entre 200 y 399. Si es así, devuelve "ok", de lo contrario, devuelve "fail". 
+            // Esto se utiliza para determinar si la petición HTTP fue exitosa o no.
+          return link;
+        })
+        .catch((error) => {
+          link.status = error.response.status;
+          link.ok = "fail";
+          return link;
+        });
+    });
+    //console.log(Promise.all(validateLinks))
+  return Promise.all(validateLinks); // Devuelve una promesa que se resuelve cuando todas las promesas en el arreglo "validateLinks" 
+  // se han resuelto. Esto significa que obtendremos un arreglo de objetos "links" con información  adicional sobre el estado de cada enlace.
+  
 }
 
 module.exports = {
@@ -52,4 +78,5 @@ module.exports = {
   fn_convertAbsoluteFile,
   fn_isMarkdownFile,
   fn_getLinks,
+  fn_validateUrl,
 };
