@@ -70,7 +70,7 @@ const validateUrl = (links) => {
         text: link.text,
         href: link.href,
         file: link.file,
-        status: error.response.status,  
+        status: error.response ? error.response.status : 'undefined status',  
         statusText: 'fail', 
       }
     })
