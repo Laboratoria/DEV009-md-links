@@ -51,14 +51,14 @@ const validateLink = (link) => {
       return link;
     })
     .catch((error) => {
-      // aqui En caso de error, agrega las propiedades status y ok al objeto de enlace con un mensaje de fallo
+      // En caso de error, agrega las propiedades status y ok al objeto de enlace con un mensaje de fallo
       link.status = error.response ? error.response.status : 'N/A';
       link.ok = false;
       return link;
     });
 };
 
-// Función para leer un directorio y procesar archivos .md
+// Función para procesar un directorio y sus subdirectorios
 const processDirectory = (directoryPath, validate) => {
   return new Promise((resolve, reject) => {
     try {
@@ -70,8 +70,20 @@ const processDirectory = (directoryPath, validate) => {
         const stats = fs.statSync(itemPath);
 
         if (stats.isFile() && isMarkdownFile(itemPath)) {
-          const linkPromise = mdLink(itemPath, validate);
+          const linkPromise = readMarkdownFile(itemPath) // Lee el contenido del archivo
+            .then((data) => {
+              const links = findLinksInMarkdown(data); // Encuentra los enlaces en el contenido
+              if (validate) {
+                // Si se desea validar, realiza la validación de cada enlace
+                return Promise.all(links.map((link) => validateLink(link)));
+              }
+              return links;
+            });
           linksPromises.push(linkPromise);
+        } else if (stats.isDirectory()) {
+          // Si es un directorio, procesa sus archivos recursivamente
+          const subdirectoryLinksPromise = processDirectory(itemPath, validate);
+          linksPromises.push(subdirectoryLinksPromise);
         }
       }
 
@@ -95,6 +107,5 @@ module.exports = {
   readMarkdownFile,
   findLinksInMarkdown,
   validateLink,
-  processDirectory, 
- 
+  processDirectory,
 };
