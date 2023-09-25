@@ -33,13 +33,13 @@ function searchLinks(data, filePath) {
   const links = [];
   if (regExp.test(data)) {
     const foundLinks = data.match(regExp)
-    console.log(foundLinks, 'foundlinks');
+    //console.log(foundLinks, 'foundlinks');
     foundLinks.forEach(link => {
       const linkParts = link.slice(1, -1).split('](');
       const text = linkParts[0]; // texto descriptivo dentro de []
       const href = linkParts[1]; // URL dentro de ()
 
-      console.log(link);
+      //console.log(link);
       links.push({
         text: text,
         href: href,
@@ -70,7 +70,7 @@ const validateUrl = (links) => {
         text: link.text,
         href: link.href,
         file: link.file,
-        status: error.status === undefined ? 'status no encontrado' : error.status,
+        status: error.response.status,  
         statusText: 'fail', 
       }
     })
@@ -81,24 +81,6 @@ return Promise.all(urlStatus)
 
 }
 
-/*const validateUrl = (url) => {
-  return new Promise((resolve, reject) => {
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          console.log('URL válida');
-          resolve(response.status);
-        } else {
-          console.log('URL no válida');
-          reject(response.status);
-        }
-      })
-      .catch((error) => {
-        console.error('Error en la solicitud:', error);
-        reject(error);
-      });
-  });
-};*/
 
 module.exports = {
   searchMdFiles,
