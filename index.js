@@ -1,7 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { searchMdFiles, readdingFile, searchLinks, validateUrl } = require('./data.js');
-
+const readdirSync = require('node:fs');
+//const files = readdirSync('./docs')
+//console.log(files);
 
 function mdLinks(filePath, validate = false) {
   return new Promise((resolve, reject) => {
@@ -9,45 +11,61 @@ function mdLinks(filePath, validate = false) {
       if (!path.isAbsolute(filePath)) {
         filePath = path.resolve(filePath);
       }
-      if (!searchMdFiles(filePath)) {
-        reject('El archivo no es Markdown');
-        return;
-      }
-      readdingFile(filePath)
-        .then((fileData) => {
-        
-          const links = searchLinks(fileData,filePath);
-          //console.log(links,'links');
-          if (links.length > 0) {
-            if(validate){
-            resolve (validateUrl(links));
-          } else {
-            resolve(links);
-          }
-           
-          } else {
-            reject('No hay links en el archivo');
-          }
+      if (fs.statSync(filePath).isDirectory()) {
+        // Si filePath es un directorio, verifica si contiene archivos md
+        const filesDirectory = fs.readdirSync(filePath);
+        const mdFilesDirectory = filesDirectory.filter((file) => path.extname(file) === '.md');
+       
+        if (mdFilesDirectory.length === 0) {
+         reject('El directorio no contiene archivos Markdown');
+        }
+        mdFilesDirectory.forEach(fileMd => {
+          readdingFile(fileMd)
         })
-        .catch((error) => {
-          reject(error);
-        });
+      } else {
+
+
+        if (!searchMdFiles(filePath)) {
+          reject('El archivo no es Markdown');
+          return;
+        }
+        readdingFile(filePath)
+          .then((fileData) => {
+
+            const links = searchLinks(fileData, filePath);
+            //console.log(links,'links');
+            if (links.length > 0) {
+              if (validate) {
+                resolve(validateUrl(links));
+              } else {
+                resolve(links);
+              }
+
+            } else {
+              reject('No hay links en el archivo');
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } 
     } else {
-      reject('La ruta no existe');
+        reject('La ruta no existe');
     }
+
     
-  }
 
-  )}
+  })
+}
 
-    /* mdLinks('./docs/archivos.md')
-     .then((resolve) => {
-        console.log(resolve);
-      })
-      .catch((reject) => {
-        console.log(reject);
-      })*/
+/* mdLinks('./docs/archivos.md')
+   .then((resolve) => {
+      console.log(resolve);
+    })
+    .catch((reject) => {
+      console.log(reject);
+    })*/
 
-module.exports =  { 
-      mdLinks
-    };
+module.exports = {
+  mdLinks
+};

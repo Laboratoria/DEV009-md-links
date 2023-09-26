@@ -47,7 +47,7 @@ function searchLinks(data, filePath) {
       })
     });
   } else {
-    console.log('no hay links en este archivo');
+  //  console.log('no hay links en este archivo');
   }
 
   return links;
