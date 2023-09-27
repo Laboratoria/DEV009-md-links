@@ -1,6 +1,6 @@
 const { mdLinks} = require ('./index.js');
 
-mdLinks('./docs', true)
+mdLinks('C:\\Users\\Laboratoria\\DataLovers', true)
 .then((links) => {
     console.log(links);
 })
