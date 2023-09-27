@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { mdLinks} = require ('./index.js');
 
 mdLinks('C:\\Users\\Laboratoria\\DataLovers', true)
@@ -8,3 +10,4 @@ mdLinks('C:\\Users\\Laboratoria\\DataLovers', true)
     console.error(error);
 });
 
+//'C:\\Users\\Laboratoria\\DataLovers'
