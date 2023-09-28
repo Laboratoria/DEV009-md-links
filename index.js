@@ -36,7 +36,7 @@ function mdLinks(filePath, validate = false) {
                 // Si validate es true, validar los enlaces y resolver con los resultados de validación
                 return validateUrl(links);
               } else {
-                // Si validate es false, simplemente resolver con los enlaces
+                // Si validate es false,  resuelve con los enlaces con 3 propiedades
                 return links;
               }
             })
@@ -55,15 +55,6 @@ function mdLinks(filePath, validate = false) {
             console.error(error);
           });
 
-
-        /* Promise.all(promises)
-           .then((results) => {
-             const allLinks = results.flatMap((result) => result.links);
-             resolve(allLinks);
-           })
-           .catch((error) => {
-             reject(error);
-           });*/
       } else {
         if (!searchMdFiles(filePath)) {
           reject('El archivo no es Markdown');

@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-const { mdLinks} = require ('./index.js');
+const { mdLinks} = require('./index.js');
+const path = process.argv[2];
+const options = process.argv.slice(3);
 
-mdLinks('C:\\Users\\Laboratoria\\DataLovers', true)
+
+mdLinks(path, options)
 .then((links) => {
     console.log(links);
 })
@@ -11,3 +14,4 @@ mdLinks('C:\\Users\\Laboratoria\\DataLovers', true)
 });
 
 //'C:\\Users\\Laboratoria\\DataLovers'
+//'C:\\Users\\Laboratoria\\DEV009-md-links\\docs\\archivos.md'
