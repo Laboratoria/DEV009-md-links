@@ -4,9 +4,11 @@ const {
   fn_convertAbsoluteFile,
   fn_isMarkdownFile,
   fn_getLinks,
+  fn_validateUrl,
+  readAllFiles,
 } = require("../data.js");
 
-//const file = "prueba.md";
+const axios = require("axios");
 
 describe("fn_myFileExist", () => {
   test("el archivo existe", () => {
@@ -39,28 +41,48 @@ describe("fn_myFileExist", () => {
     expect(fn_isMarkdownFile(isNotMarkdown)).toBe(".txt");
   });
 
+ 
   test("debería retornar los enlaces encontrados", () => {
-    return fn_getLinks("prueba.md").then((res) => {
-      expect(res).toEqual([
-        
-            {
-              href: 'https://es.wikipedia.org/wiki/Markdown',
-              text: 'Markdown',
-              file: 'prueba.md'
-            },
-            { href: 'https://nodejs.org/', text: 'Node.js', file: 'prueba.md' },
-            {
-              href: 'https://nodejs.org/es/',
-              text: 'Node.js',
-              file: 'prueba.md'
-            },
-            {
-              href: 'https://developers.google.com/v8/',
-              text: 'motor de JavaScript V8 de Chrome',
-              file: 'prueba.md'
-            }
-          
-        ]);
+    const files = ["prueba.md"]
+    return fn_getLinks(files).then((data) => {
+      expect(data).toEqual([
+        {
+          href: 'https://es.wikipedia.org/wiki/Markdown',
+          text: 'Markdown',
+          file: 'prueba.md'
+        },
+        { href: 'https://nodejs.org/', text: 'Node.js', file: 'prueba.md' },
+        {
+          href: 'https://nodejs.org/es/',
+          text: 'Node.js',
+          file: 'prueba.md'
+        },
+        {
+          href: 'https://developers.google.com/v8',
+          text: 'motor de JavaScript V8 de Chrome',
+          file: 'prueba.md'
+        },
+        {
+          href: 'https://es.wikipedia.org/wiki/Markdown/dev009',
+          text: 'Markdown',
+          file: 'prueba.md'
+        }
+      ]);
     });
   });
+
+ test('debería retornar los archivos markdown encontrados en el directorio', () => {
+      const dirPath = "./ejem-directorio"
+      return readAllFiles(dirPath).then((data) => {
+      expect(data).toEqual([
+        "./ejem-directorio/readme.md", 
+        "./ejem-directorio/sub-directorio/fl_viajes.md"
+      ]);
+    });
+  });
+
+  
+
+
+  //
 });
