@@ -6,6 +6,7 @@ const { readFile } = require('node:fs');
 const MarkdownIt = require('markdown-it');
 const axios = require('axios');
 
+
 // Comprueba que la ruta sea absoluta
 const isAbsolute = (pathFile)=>{
   return path.isAbsolute(pathFile);
@@ -90,12 +91,13 @@ const linksOn_Off = (links)=> {
   })
   return Promise.all(myLinks);
 }
-const readDir = (pathFile) =>{
-  const readingDir = fs.readdirSync(pathFile);
-    return readingDir.filter(pathFileBasename => fileMd(pathFileBasename)).map(pathFileBasename => path.join(pathFile, pathFileBasename));
+const readDir = (dir) =>{
+  const files = fs.readdirSync(dir);
+  const filePaths = files.map(file => path.join(dir, file));
+  return filePaths;
+    // return readingDir.filter(pathFileBasename => fileMd(pathFileBasename)).map(pathFileBasename => path.join(pathFile, pathFileBasename).toString;
 }
-const resultado = readDir('md');
-console.log(resultado);
+console.log(readDir('md'));
 
 
 
