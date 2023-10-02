@@ -2,8 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { searchMdFiles, readdingFile, searchLinks, validateUrl, readdingFileMdDirectory } = require('./data.js');
 const readdirSync = require('node:fs');
-//const files = readdirSync('./docs')
-//console.log(files);
+
 
 function mdLinks(filePath, validate = false) {
   return new Promise((resolve, reject) => {
@@ -15,14 +14,10 @@ function mdLinks(filePath, validate = false) {
         // Si filePath es un directorio, verifica si contiene archivos md
         const filesDirectory = fs.readdirSync(filePath);
         const mdFilesDirectory = filesDirectory.filter((file) => path.extname(file) === '.md');
-
         if (mdFilesDirectory.length === 0) {
           reject('El directorio no contiene archivos Markdown');
           return;
         }
-
-        const linksInDirectory = [];
-
         // Crear un arreglo de promesas
         const promises = mdFilesDirectory.map((fileMd) => {
           const mdFilePath = path.join(filePath, fileMd);
@@ -41,15 +36,19 @@ function mdLinks(filePath, validate = false) {
               }
             })
             .then((result) => {
-              linksInDirectory.push(result);
+             // linksInDirectory.push(result);
+              return result
             });
         });
-
+        //console.log(Promise.all(promises))
+        //resolve(Promise.all(promises))
         // Esperar a que todas las promesas se resuelvan
         Promise.all(promises)
-          .then(() => {
+          .then((res) => {
+           // console.log(res.flat())
+            resolve(res.flat())
             // En este punto, todas las promesas se han resuelto y los resultados se han agregado a linksInDirectory
-            console.log(linksInDirectory);
+          //return linksInDirectory;
           })
           .catch((error) => {
             console.error(error);
@@ -82,15 +81,6 @@ function mdLinks(filePath, validate = false) {
     }
   });
 }
-
-
-/* mdLinks('./docs/archivos.md')
-   .then((resolve) => {
-      console.log(resolve);
-    })
-    .catch((reject) => {
-      console.log(reject);
-    })*/
 
 module.exports = {
   mdLinks

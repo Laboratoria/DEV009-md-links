@@ -8,28 +8,33 @@ const options = {
     stats: process.argv.includes('--stats')
 };
 
-mdLinks(path, options)
+mdLinks(path, options.validate)
     .then((links) => {
         if (options.stats) {
             const totalLinks = links.length;
             const uniqueLinks = new Set(links.map(link => link.href)); // Usar Set para obtener enlaces únicos
 
-            console.log(`Total: ${totalLinks} links`.magenta.bold);
-            console.log(`Unique: ${[...uniqueLinks].length} links`.cyan.bold); // Convertir Set a un array y mostrarlo
+            console.log(colors.magenta.bold(`Total: ${totalLinks} links`));
+            console.log(colors.cyan.bold(`Unique: ${[...uniqueLinks].length} links`)); // Convertir Set a un array y mostrarlo
+            if(options.validate){
+                const failLinks = links.filter(link => link.status !== 200).length;
+                console.log(colors.yellow.bold(`Broken: ${failLinks} links`));
+                const successLinks = links.filter(link => link.status === 200).length;
+                console.log(colors.white.bold(`Success: ${successLinks} links`));
+            }
         }
 
-        if (options.validate) {
-            const successLinks = links.filter(link => link.status === 200).length;
-            const failLinks = links.filter(link => link.status !== 200).length;
-            console.log(`Success: ${successLinks} links`.white.bold);
-            console.log(`Fail: ${failLinks} links`.yellow.bold);
-        } else {
+        else {
             console.log(links);
+            
+        } 
         }
-    })
+        
+    )
     .catch((error) => {
         console.error(error);
     });
+
 
 
 
