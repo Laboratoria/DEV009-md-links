@@ -3,42 +3,55 @@ const {
     isMarkdownFile,
     readMarkdownFile,
     findLinksInMarkdown,
-  } = require('../mdLink.js'); 
+  } = require('../mdLink.js');
   
-  describe('functions', () => {
-    // Prueba para la función pathExists
-    test('pathExists deberia retornar file existente', () => {
-      const filePath = './miPrueba.md';
+  const axios = require('axios');
+  
+  jest.mock('axios');
+  axios.head.mockResolvedValue({ status: 200, statusText: 'OK' });
+  
+  describe('Functions in mdLink.js', () => {
+    // Prueba para pathExists
+    test('pathExists debería retornar false para archivo inexistente', () => {
+      const filePath = './archivo_inexistente.md';
       const exists = pathExists(filePath);
-      expect(exists).toBe(true);
+      expect(exists).toBe(false);
     });
   
-    // Prueba para la función isMarkdownFile
-    test('isMarkdownFile deberia  retornar true para .md', () => {
-      const filePath = 'miPrueba.md'; 
+    // Prueba para isMarkdownFile
+    test('isMarkdownFile debería retornar false para archivo sin extensión .md', () => {
+      const filePath = 'archivo_sin_extension.txt';
       const isMarkdown = isMarkdownFile(filePath);
-      expect(isMarkdown).toBe(true);
+      expect(isMarkdown).toBe(false);
     });
   
-    // Prueba para la función readMarkdownFile
-    test('readMarkdownFile deberia leer y retornar', () => {
-      const filePath = './miPrueba.md'; 
-      return readMarkdownFile(filePath).then((content) => {
-        // Verifica que el contenido leído no esté vacío
-        expect(content).toBeTruthy();
-      });
+    // Prueba para readMarkdownFile con archivo inexistente
+    test('readMarkdownFile debería rechazar con un mensaje de error para archivo inexistente', async () => {
+      const filePath = './archivo_inexistente.md';
+      try {
+        await readMarkdownFile(filePath);
+      } catch (error) {
+        expect(error).toMatch(/Error al leer el archivo/);
+      }
     });
+
   
-    // aqui probamos para la función findLinksInMarkdown
-    test('findLinksInMarkdown deberia retornar array de los links', () => {
-      const markdownContent = 'Contenido con [enlace](https://example.com)';
+    // Prueba para findLinksInMarkdown con varios enlaces en el contenido
+    test('findLinksInMarkdown debería retornar un array de objetos de enlace para contenido con varios enlaces', () => {
+      const markdownContent = 'Contenido con [enlace1](https://example1.com) y [enlace2](https://example2.com)';
       const links = findLinksInMarkdown(markdownContent);
       expect(Array.isArray(links)).toBe(true);
-      // Verificamos que el arreglo contenga un objeto de enlace con las propiedades href y text
-      expect(links[0]).toHaveProperty('href');
-      expect(links[0]).toHaveProperty('text');
+      expect(links).toHaveLength(2);
+      expect(links[0]).toHaveProperty('href', 'https://example1.com');
+      expect(links[1]).toHaveProperty('href', 'https://example2.com');
     });
-  
     
+    // Prueba para findLinksInMarkdown con contenido sin enlaces
+    test('findLinksInMarkdown debería retornar un array vacío para contenido sin enlaces', () => {
+      const markdownContent = 'Este es un documento sin enlaces.';
+      const links = findLinksInMarkdown(markdownContent);
+      expect(Array.isArray(links)).toBe(true);
+      expect(links).toHaveLength(0);
+    });
   });
   

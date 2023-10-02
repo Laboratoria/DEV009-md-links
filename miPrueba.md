@@ -11,3 +11,5 @@ El trading es la compra y venta de activos financieros con el objetivo de obtene
 - **YouTube**: [YouTube](https://www.youtube.com) - Canales con tutoriales, análisis de mercado y consejos de traders.
 
 Explora estas herramientas para mejorar tus habilidades de trading. Verifica siempre la calidad de las fuentes antes de tomar decisiones financieras.
+
+[Enlace con error](http://www.holi)
