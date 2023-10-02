@@ -27,6 +27,19 @@ function readdingFile(filePath) {
   })
 }
 
+function readdingFileMdDirectory(fileMd) {
+  return new Promise((resolve, reject) => {
+
+    fs.readFile(fileMd, 'utf-8', (error, data) => {
+      if (error) {
+        reject('Ocurrió un error al leer el archivo:', error);
+      } else {
+        resolve(data);
+      }
+    });
+  })
+}
+
 //función que busca links en archivo y encuentra href, text y file
 function searchLinks(data, filePath) {
   const regExp = RegExp(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g); //guarda url del link
@@ -47,7 +60,7 @@ function searchLinks(data, filePath) {
       })
     });
   } else {
-    console.log('no hay links en este archivo');
+  //  console.log('no hay links en este archivo');
   }
 
   return links;
@@ -86,4 +99,4 @@ module.exports = {
   searchMdFiles,
   readdingFile,
   searchLinks,
-  validateUrl }
+  validateUrl, readdingFileMdDirectory }
