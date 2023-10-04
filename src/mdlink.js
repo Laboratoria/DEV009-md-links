@@ -39,11 +39,10 @@ function mdLinks(mdFiles, validate) {
       } else {
         reject("Error: el archivo no es markdown");
         }
-    } 
   });
 }
 
-mdLinks(mdFiles)
+mdLinks(mdFiles, validate)
   .then((result) => {
     console.log(result);
   })
