@@ -28,7 +28,7 @@ const fileMd = (pathFile)=>{
 const readingContent = (pathFile) => {
   return new Promise ((resolve, reject) =>{
       readFile(pathFile, 'utf8', (err, data) => {
-          if (err) throw err;
+          if (err) reject (err);
           resolve(data);
         });
   });
@@ -69,9 +69,9 @@ if (links.length === 0){
 
 const linksOn_Off = (links)=> {
   const myLinks = links.map(link => {
-    return axios.getAdapter(link.href)
-    .then(funtion(response),{
-      return: {
+    return axios.get(link.href)
+    .then((response)=>{
+      return {
         href: link.href,
         text: link.text,
         file: link.file,
@@ -91,13 +91,13 @@ const linksOn_Off = (links)=> {
   })
   return Promise.all(myLinks);
 }
-const readDir = (dir) =>{
-  const files = fs.readdirSync(dir);
-  const filePaths = files.map(file => path.join(dir, file));
-  return filePaths;
-    // return readingDir.filter(pathFileBasename => fileMd(pathFileBasename)).map(pathFileBasename => path.join(pathFile, pathFileBasename).toString;
-}
-console.log(readDir('md'));
+// const readDir = (dir) =>{
+//   const files = fs.readdirSync(dir);
+//   const filePaths = files.map(file => path.join(dir, file));
+//   return filePaths;
+//     // return readingDir.filter(pathFileBasename => fileMd(pathFileBasename)).map(pathFileBasename => path.join(pathFile, pathFileBasename).toString;
+// }
+// console.log(readDir('md'));
 
 
 
@@ -116,6 +116,6 @@ console.log(readDir('md'));
     extractingLinks,
     readingContent,
     linksOn_Off,
-    readDir,
+    //readDir,
 };
 

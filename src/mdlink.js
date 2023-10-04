@@ -7,43 +7,39 @@ const {
   pathIsValid,
   linksOn_Off,
   readDir,
-} = require("../src/data.js");
-let mdFiles = 'md';
+} = require("./data.js");
+let mdFiles = './src/textoPrueba.md';
+let validate = true;
 
 function mdLinks(mdFiles, validate) {
   return new Promise ((resolve, reject) => {
     if (!isAbsolute(mdFiles)){
       mdFiles = pathResult(mdFiles);
+      if (!mdFiles){
+        reject("Error: la ruta no existe");
+        return
+      }
+      console.log(mdFiles);
     }
       if(pathIsValid(mdFiles)){
         if(fileMd(mdFiles)){
-          readingContent(readDir(mdFiles)).then((content) => {
+          readingContent((mdFiles)).then((content) => {
           console.log ("then del readingContent");
           extractingLinks(mdFiles, content).then(links => {
             if(validate){
-              resolve(linksOn_Off(links));
+              linksOn_Off(links).then(
+                (links) => resolve(links)
+              );
             } else {
               resolve(links);
             }
           })
           })
-      
-      } else if (fileMd(mdFiles)){
-        readingContent(mdFiles).then(links => {
-          extractingLinks(mdFiles, content).then(links => {
-          if(validate){
-            resolve(linksOn_Off(links))
-          } else {
-            resolve(links);
-          }
-        })
-      })
-        } else {
+        }
+      } else {
         reject("Error: el archivo no es markdown");
         }
-    } else {
-      reject("Error: la ruta no existe");
-    }
+    } 
   });
 }
 
