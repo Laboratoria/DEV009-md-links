@@ -9,8 +9,9 @@ const {
 } = require("../data.js");
 
 const axios = require("axios");
+jest.mock("axios");
 
-describe("fn_myFileExist", () => {
+describe("probar funciones puras", () => {
   test("el archivo existe", () => {
     return fn_myFileExist("prueba.md").then((res) => {
       expect(res).toBe(true);
@@ -41,48 +42,72 @@ describe("fn_myFileExist", () => {
     expect(fn_isMarkdownFile(isNotMarkdown)).toBe(".txt");
   });
 
- 
   test("debería retornar los enlaces encontrados", () => {
-    const files = ["prueba.md"]
+    const files = ["prueba.md"];
     return fn_getLinks(files).then((data) => {
       expect(data).toEqual([
         {
-          href: 'https://es.wikipedia.org/wiki/Markdown',
-          text: 'Markdown',
-          file: 'prueba.md'
+          href: "https://es.wikipedia.org/wiki/Markdown",
+          text: "Markdown",
+          file: "prueba.md",
         },
-        { href: 'https://nodejs.org/', text: 'Node.js', file: 'prueba.md' },
+        { href: "https://nodejs.org/", text: "Node.js", file: "prueba.md" },
         {
-          href: 'https://nodejs.org/es/',
-          text: 'Node.js',
-          file: 'prueba.md'
-        },
-        {
-          href: 'https://developers.google.com/v8',
-          text: 'motor de JavaScript V8 de Chrome',
-          file: 'prueba.md'
+          href: "https://nodejs.org/es/",
+          text: "Node.js",
+          file: "prueba.md",
         },
         {
-          href: 'https://es.wikipedia.org/wiki/Markdown/dev009',
-          text: 'Markdown',
-          file: 'prueba.md'
-        }
+          href: "https://developers.google.com/v8",
+          text: "motor de JavaScript V8 de Chrome",
+          file: "prueba.md",
+        },
+        {
+          href: "https://es.wikipedia.org/wiki/Markdown/dev009",
+          text: "Markdown",
+          file: "prueba.md",
+        },
       ]);
     });
   });
 
- test('debería retornar los archivos markdown encontrados en el directorio', () => {
-      const dirPath = "./ejem-directorio"
-      return readAllFiles(dirPath).then((data) => {
+  test("debería retornar los archivos markdown encontrados en el directorio", () => {
+    const dirPath = "./ejem-directorio";
+    return readAllFiles(dirPath).then((data) => {
       expect(data).toEqual([
-        "./ejem-directorio/readme.md", 
-        "./ejem-directorio/sub-directorio/fl_viajes.md"
+        "./ejem-directorio/readme.md",
+        "./ejem-directorio/sub-directorio/fl_viajes.md",
       ]);
     });
   });
 
-  
+  test("debería resolver si la url son validas", () => {
+    axios.get.mockResolvedValue({ status: 200 });
 
+    return expect(
+      fn_validateUrl([{ href: "https://www.google.com/" }])
+    ).resolves.toEqual([
+      { 
+        href: "https://www.google.com/", 
+        status: 200, 
+        ok: "ok" 
+      },
+    ]);
+  });
+
+  // test("deberîa reject si las url No es valida", () => {
+  //   axios.get.mockRejectedValue({ response: { status: 404 } });
+
+  //   return expect(
+  //     fn_validateUrl([{ href: "https://www.google.com/dev009" }])
+  //   ).rejects.toEqual([
+  //     {
+  //       href: "https://www.google.com/dev009",
+  //       status: 404,
+  //       ok: "fail",
+  //     },
+  //   ]);
+  // });
 
   //
 });

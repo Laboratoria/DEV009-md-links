@@ -4,7 +4,7 @@ const { access, constants } = require("fs").promises; // metodo access se usa pa
 const path = require("path"); // manipulacion y navegacion de rutas de archivos y directorios
 const axios = require("axios");
 const { fn } = require("jest-mock");
-const { promiseHooks } = require("v8");
+const { rejects } = require("assert");
 
 // --------------------   verifica si un archivo existe --------------------  //
 function fn_myFileExist(file) {
@@ -54,7 +54,7 @@ function fn_getLinks(files) {
 
   return Promise.all(promises)
     .then((results) => {
-      const arrayLinks = [].concat(...results); // Flatten the array of arrays
+      const arrayLinks = [].concat(...results);
       //console.log(arrayLinks)
       return arrayLinks;
     })
@@ -81,14 +81,14 @@ function fn_validateUrl(links) {
         .catch((error) => {
           link.status = error.response.status;
           link.ok = "fail";
-          return link;
+         return link;
         })
     );
   });
   return Promise.all(validateLinks); // Devuelve una promesa que se resuelve cuando todas las promesas en el arreglo "validateLinks"
   // se han resuelto. Esto significa que obtendremos un arreglo de objetos "links" con información  adicional sobre el estado de cada enlace.
 }
-// --------------------     probar la funcion fn_validarUrl   --------------------  //
+// --------------------     funcion fn_validarUrl   --------------------  //
 // linksToValidate = [
 //   { href: "https://www.google.com/dev009" },
 //   { href: "https://www.google.com/" },
@@ -148,17 +148,12 @@ function readAllFiles(path) {
     //console.log(arrayOfFiles)
   resolve (arrayOfFiles);
   });
-
-  
 }
-//readAllFiles("./dirEjemplo");
+//console.log(readAllFiles("./ejem-directorio"), " lista de sub");
 
-//console.log(readAllFiles("./dirEjemplo"), " lista de sub");
-/////
 
-// fn_readAllFiles("./dirEjemplo");
 
-// console.log(fn_readAllFiles("./dirEjemplo"), " lista de sub");
+
 
 module.exports = {
   fn_myFileExist,

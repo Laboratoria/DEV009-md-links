@@ -13,8 +13,9 @@ const {
 } = require("./data.js");
 
 const pc = require("picocolors");
-const { patch } = require("semver");
 const path = require("path");
+
+
 
 const extension = [
   ".md",
@@ -33,6 +34,7 @@ function mdLinks(file, validate) {
 
       if (!exist) {
         reject("❌ no existe, ingresa una ruta correcta");
+        return;
       }
       const nowAbsolute = fn_convertAbsoluteFile(file);
 

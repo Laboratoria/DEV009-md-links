@@ -1,7 +1,7 @@
 
 const { mdLinks } = require("../index.js");
 
-//const pathNoExist = "noExiste.md"
+const pathNoExist = "noExiste.md"
 const file = "prueba.md"
 
 describe("mdLinks", () => {
@@ -36,11 +36,11 @@ describe("mdLinks", () => {
       );
     });
   });
-  // it("comprueba que el archivo no existe", () => {
-  //   return mdLinks(pathNoExist).catch((error) => {
-  //     expect(error).toBe("❌ no existe, ingresa una ruta correcta");
-  //   });
-  // });
+  it("comprueba que el archivo no existe", () => {
+    return mdLinks(pathNoExist).catch((error) => {
+      expect(error).toBe("❌ no existe, ingresa una ruta correcta");
+    });
+  });
 
 
 

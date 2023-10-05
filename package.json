@@ -222,5 +222,8 @@
   "bugs": {
     "url": "https://github.com/nancyale24/DEV009-md-links/issues"
   },
-  "homepage": "https://github.com/nancyale24/DEV009-md-links#readme"
+  "homepage": "https://github.com/nancyale24/DEV009-md-links#readme",
+  "bin": {
+    "md-links": "cli.js"
+  }
 }
