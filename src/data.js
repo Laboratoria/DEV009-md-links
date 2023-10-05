@@ -20,6 +20,10 @@ const pathIsValid = (pathFile) => {
    return fs.existsSync(pathFile) 
   }
 
+  const isDirectory = (file) =>{
+    const stats = fs.statSync(file);
+    return stats.isDirectory(file);
+}
 // es .md
 const fileMd = (pathFile)=>{
   const extname = path.extname(pathFile);
@@ -66,7 +70,6 @@ if (links.length === 0){
   return Promise.resolve(links);
 }
 }
-
 const linksOn_Off = (links)=> {
   const myLinks = links.map(link => {
     return axios.get(link.href)
@@ -75,7 +78,7 @@ const linksOn_Off = (links)=> {
         href: link.href,
         text: link.text,
         file: link.file,
-        satus: response.status,
+        status: response.status,
         ok: response.status >= 200 && response.status < 400 ? 'ok' : 'fail',
       }
     })
@@ -91,13 +94,11 @@ const linksOn_Off = (links)=> {
   })
   return Promise.all(myLinks);
 }
-// const readDir = (dir) =>{
-//   const files = fs.readdirSync(dir);
-//   const filePaths = files.map(file => path.join(dir, file));
-//   return filePaths;
-//     // return readingDir.filter(pathFileBasename => fileMd(pathFileBasename)).map(pathFileBasename => path.join(pathFile, pathFileBasename).toString;
-// }
-// console.log(readDir('md'));
+const readDir = (dir) =>{
+  const files = fs.readdirSync(dir);
+  const filePaths = files.map(file => path.join(dir, file));
+  return filePaths.filter(pathFileBasename => fileMd(pathFileBasename));
+}
 
 
 
@@ -111,11 +112,12 @@ const linksOn_Off = (links)=> {
   module.exports = { 
     pathResult,
     isAbsolute,
+    isDirectory,
     fileMd,
     pathIsValid,
     extractingLinks,
     readingContent,
     linksOn_Off,
-    //readDir,
+    readDir,
 };
 
