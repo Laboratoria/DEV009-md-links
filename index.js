@@ -40,15 +40,11 @@ function mdLinks(filePath, validate = false) {
               return result
             });
         });
-        //console.log(Promise.all(promises))
-        //resolve(Promise.all(promises))
         // Esperar a que todas las promesas se resuelvan
         Promise.all(promises)
           .then((res) => {
            // console.log(res.flat())
-            resolve(res.flat())
-            // En este punto, todas las promesas se han resuelto y los resultados se han agregado a linksInDirectory
-          //return linksInDirectory;
+            resolve(res.flat())     
           })
           .catch((error) => {
             console.error(error);
@@ -56,7 +52,7 @@ function mdLinks(filePath, validate = false) {
 
       } else {
         if (!searchMdFiles(filePath)) {
-          reject('El archivo no es Markdown');
+          reject('Error: El archivo no es Markdown');
           return;
         }
         readdingFile(filePath)
@@ -77,7 +73,7 @@ function mdLinks(filePath, validate = false) {
           });
       }
     } else {
-      reject('La ruta no existe');
+      reject('Error: la ruta no existe');
     }
   });
 }
