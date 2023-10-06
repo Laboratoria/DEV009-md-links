@@ -35,15 +35,15 @@ function fn_getLinks(files) {
       const links = [];
 
       fs.readFile(fil, (err, data) => {
-        if (err) {
+        if (err) {  // Si no hay errores al leer el archivo
           reject(err);
-        } else {
+        } else { //se ejecuta un bucle while que busca coincidencias de enlaces utilizando una expresión regular.
           let match;
           while ((match = linkRegex.exec(data)) !== null) {
-            links.push({
-              href: match[2],
-              text: match[1],
-              file: fil,
+            links.push({  //Cada vez que se encuentra una coincidencia, se agrega un objeto al arreglo links
+              href: match[2], //URL del enlace
+              text: match[1], //texto del enlace
+              file: fil, //nombre del archivo
             });
           }
           resolve(links);
@@ -88,10 +88,9 @@ function fn_validateUrl(links) {
   return Promise.all(validateLinks); // Devuelve una promesa que se resuelve cuando todas las promesas en el arreglo "validateLinks"
   // se han resuelto. Esto significa que obtendremos un arreglo de objetos "links" con información  adicional sobre el estado de cada enlace.
 }
-// --------------------     funcion fn_validarUrl   --------------------  //
+//--------------------     funcion fn_validarUrl   --------------------  //
 // linksToValidate = [
-//   { href: "https://www.google.com/dev009" },
-//   { href: "https://www.google.com/" },
+//   { href: "https://www.google.com/dev009" }
 // ];
 
 // fn_validateUrl(linksToValidate)

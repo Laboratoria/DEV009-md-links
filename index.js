@@ -15,8 +15,6 @@ const {
 const pc = require("picocolors");
 const path = require("path");
 
-
-
 const extension = [
   ".md",
   ".mkd",
@@ -31,7 +29,6 @@ const extension = [
 function mdLinks(file, validate) {
   return new Promise((resolve, reject) => {
     fn_myFileExist(file).then((exist) => {
-
       if (!exist) {
         reject("❌ no existe, ingresa una ruta correcta");
         return;
@@ -39,35 +36,29 @@ function mdLinks(file, validate) {
       const nowAbsolute = fn_convertAbsoluteFile(file);
 
       if (fs.statSync(nowAbsolute).isDirectory()) {
-        //console.log("es un directorio");       
-        readAllFiles(nowAbsolute)
-        .then(arrayOfFiles => {
-        //console.log(arrayOfFiles, "todos los archivos");
+        //console.log("es un directorio");
+        //console.log(readAllFiles(nowAbsolute), "kkk")
+        readAllFiles(nowAbsolute).then((arrayOfFiles) => {
+          //console.log(arrayOfFiles, "todos los archivos");
 
           fn_getLinks(arrayOfFiles).then((links) => {
             if (validate) {
               // si validate es true
               fn_validateUrl(links) // llama a la funcion para verificar los enlaces obtenido
                 .then((validateLinks) => {
-                 
-                  resolve(validateLinks); // resuelve la promesa con el objeto result
-                  //console.log(result);
+                  resolve(validateLinks);
                 })
                 .catch((err) => {
                   reject(err);
                 });
-                
-            }
-            else {
+            } else {
               resolve(links);
             }
           });
-      })
-      }
-
-      else {
+        });
+      } else {
         //console.log("es un archivo");
-        
+
         // el archivo termina con alguna de estas extensiones array(extenciones)?
         if (extension.includes(fn_isMarkdownFile(file))) {
           fn_getLinks([file])
@@ -87,7 +78,7 @@ function mdLinks(file, validate) {
               }
             })
             .catch((err) => {
-              // cuando el archivo no es markdowm, se rechaza la promesa con error
+              console.log(err);
               reject(err);
             });
         } else {

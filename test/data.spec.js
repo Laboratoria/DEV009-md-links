@@ -95,19 +95,19 @@ describe("probar funciones puras", () => {
     ]);
   });
 
-  // test("deberîa reject si las url No es valida", () => {
-  //   axios.get.mockRejectedValue({ response: { status: 404 } });
+  test("deberîa resolver con status 404 si las url No es valida", () => {
+    axios.get.mockResolvedValue({  status: 404 } );
 
-  //   return expect(
-  //     fn_validateUrl([{ href: "https://www.google.com/dev009" }])
-  //   ).rejects.toEqual([
-  //     {
-  //       href: "https://www.google.com/dev009",
-  //       status: 404,
-  //       ok: "fail",
-  //     },
-  //   ]);
-  // });
+    return expect(
+      fn_validateUrl([{ href: "https://www.google.com/dev009" }])
+    ).resolves.toEqual([
+      {
+      "href": "https://www.google.com/dev009", 
+      ok: "fail", 
+      status: 404
+    },
+    ]);
+  });
 
   //
 });
