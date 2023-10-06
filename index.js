@@ -83,6 +83,7 @@ function mdLinks(file, validate) {
             });
         } else {
           reject("❌ No es un archivo markdown");
+          return;
         }
       }
     });

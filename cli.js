@@ -18,7 +18,7 @@ mdLinks(path, option.validate)
 
       console.log("Total ", total)
       console.log("Unique ", unique)
-      console.log("Broken: ", broken)
+      console.log("Broken: ", broken) 
     }
     
     else if (option.stats) {

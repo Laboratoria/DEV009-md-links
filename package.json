@@ -134,6 +134,7 @@
     "json-parse-even-better-errors": "^2.3.1",
     "json5": "^2.2.3",
     "kleur": "^3.0.3",
+    "latest-version": "^7.0.0",
     "leven": "^3.1.0",
     "lines-and-columns": "^1.2.4",
     "locate-path": "^5.0.0",
@@ -224,6 +225,6 @@
   },
   "homepage": "https://github.com/nancyale24/DEV009-md-links#readme",
   "bin": {
-    "md-links": "cli.js"
+    "nancymv": "cli.js"
   }
 }
