@@ -19,7 +19,7 @@ function readdingFile(filePath) {
 
     fs.readFile(filePath, 'utf-8', (error, data) => {
       if (error) {
-        reject('Ocurrió un error al leer el archivo:', error);
+        reject('Error: Ocurrió un error al leer el archivo', error);
       } else {
         resolve(data);
       }
@@ -28,12 +28,14 @@ function readdingFile(filePath) {
 }
 
 function readdingFileMdDirectory(fileMd) {
-  return new Promise((resolve, reject) => {
 
+  return new Promise((resolve, reject) => {
+    
     fs.readFile(fileMd, 'utf-8', (error, data) => {
       if (error) {
-        reject('Ocurrió un error al leer el archivo:', error);
+        reject('Error: Ocurrió un error al leer el archivo', error);
       } else {
+
         resolve(data);
       }
     });
@@ -46,13 +48,11 @@ function searchLinks(data, filePath) {
   const links = [];
   if (regExp.test(data)) {
     const foundLinks = data.match(regExp)
-    //console.log(foundLinks, 'foundlinks');
     foundLinks.forEach(link => {
       const linkParts = link.slice(1, -1).split('](');
       const text = linkParts[0]; // texto descriptivo dentro de []
       const href = linkParts[1]; // URL dentro de ()
 
-      //console.log(link);
       links.push({
         text: text,
         href: href,

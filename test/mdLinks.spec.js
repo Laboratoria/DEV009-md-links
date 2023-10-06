@@ -1,3 +1,4 @@
+const { default: test } = require('node:test');
 const { mdLinks } = require('../index.js');
 
 describe('mdLinks', () => {
