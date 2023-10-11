@@ -8,23 +8,32 @@ const {
   pathIsValid,
   linksOn_Off,
   readDir,
+  forDirectory,
 } = require("./data.js");
 
 
-function mdLinks(mdFiles, validate) {
+function mdLinks(inputPath, validate) {
   return new Promise((resolve, reject) => {
-    if (!isAbsolute(mdFiles)) {
-      mdFiles = pathResult(mdFiles);
+    if (!isAbsolute(inputPath)) {
+      inputPath = pathResult(inputPath);
     }
-    if (pathIsValid(mdFiles)) {
-      if (isDirectory(mdFiles)) {
-       const Directorio = readDir(mdFiles)
-        console.log(Directorio);
+    if (pathIsValid(inputPath)) {
+      if (isDirectory(inputPath)) {
+        forDirectory(inputPath).then((links)=>{
+          if (!validate){
+            resolve(links);
+          } else {
+            linksOn_Off(links).then((res)=>{
+              resolve(res);
+            });
+          }
+        });
+       
       } else {
 
-        if (fileMd(mdFiles)) {
-          readingContent((mdFiles)).then((content) => {
-            extractingLinks(mdFiles, content).then(links => {
+        if (fileMd(inputPath)) {
+          readingContent((inputPath)).then((content) => {
+            extractingLinks(inputPath, content).then(links => {
               if (validate) {
                 linksOn_Off(links).then(
                   (links) => resolve(links)

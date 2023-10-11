@@ -1,4 +1,4 @@
-const { pathResult, isAbsolute, fileMd, readingContent, extractingLinks, pathIsValid, linksOn_Off} = require('../src/data.js');
+const { pathResult, isAbsolute, fileMd, readingContent, extractingLinks, pathIsValid, isDirectory, linksOn_Off} = require('../src/data.js');
 const axios = require('axios');
 
 jest.mock('axios');
@@ -9,7 +9,6 @@ describe('linksOn_Off', () => {
       { href: 'https://es.wikipedia.org/wiki/Los_Simpson', text: 'Los Simpson', file: 'src\textoPrueba.md' },
     ];
 
-    // Configura el comportamiento simulado de axios para una respuesta exitosa
     axios.get.mockResolvedValue({ status: 200, statusText: 'OK' });
 
     return linksOn_Off(links).then((result) => {
@@ -45,7 +44,6 @@ describe('linksOn_Off', () => {
       });
     });
   
-    // Agrega más pruebas según sea necesario
   });
 describe('isAbsolute', () => {
     it('Debería validar que es una ruta absoluta', () => {
@@ -75,6 +73,17 @@ describe('pathIsValid', () => {
         expect(pathIsValid(file)).toBe(false);
     });
 })
+
+describe('isDirectory', () => {
+    test('Debería comprobar que la ruta pertenece a un directorio', () => {
+      const file = '/Users/Laboratoria/Desktop/Laboratoria/DEV009-md-links/src';
+      expect(isDirectory(file)).toBe(true);
+    });
+    test('Debería comprobar que la ruta no pertenece a un directorio', () => {
+      const file = '/Users/Laboratoria/Desktop/Laboratoria/DEV009-md-links/index.js';
+      expect(isDirectory(file)).toBe(false);
+    });
+  })
 
 describe('fileMd', () => {
     it('Debería comprobar que el archivo es markdown', () => {
@@ -122,6 +131,8 @@ describe('extractingLinks', () => {
           extractingLinks(file, readDataContent).then((response) => {
             expect(response).toEqual(awaitDataContent );
             done();
+          }).catch(()=>{
+
           })
     });
     it('Debería rechazar si encuentra links dentro del archivo', (done) => {
@@ -139,5 +150,5 @@ describe('extractingLinks', () => {
         return extractingLinks(pathFile, readingContent).catch((error) => {
           expect(error).toBe('No se encontraron links en este archivo');
         });
-      });
+      }); 
 })

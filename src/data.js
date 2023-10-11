@@ -20,9 +20,9 @@ const pathIsValid = (pathFile) => {
    return fs.existsSync(pathFile) 
   }
 
-  const isDirectory = (file) =>{
-    const stats = fs.statSync(file);
-    return stats.isDirectory(file);
+const isDirectory = (pathFile) =>{
+  const stats = fs.statSync(pathFile);
+  return stats.isDirectory(pathFile);
 }
 // es .md
 const fileMd = (pathFile)=>{
@@ -83,32 +83,96 @@ const linksOn_Off = (links)=> {
       }
     })
     .catch(function(error){
+      //console.log(error);
       return {
         href: link.href,
         text: link.text,
         file: link.file,
-        status: error.response.status,
+        status: error.response ? error.response.status : 500,
         ok: 'fail',
       }
   })
   })
   return Promise.all(myLinks);
 }
-const readDir = (dir) =>{
-  const files = fs.readdirSync(dir);
-  const filePaths = files.map(file => path.join(dir, file));
-  return filePaths.filter(pathFileBasename => fileMd(pathFileBasename));
+
+const linksStst = (links) => {
+  const oneLinks = [];
+  for(let i =0; i < links.length; i++){
+  if(!oneLinks.includes(links[i].href)){
+      oneLinks.push(links[i].href);
+  } 
+  }  
+  return {
+      total: links.length, 
+      unique: oneLinks.length
+  }  
 }
 
+const stats_Validate = (all_Links) => {
+  const countOne = [];
+  const countBroken = [];
+  for(let i =0; i < all_Links.length; i++){
+      if(!countOne.includes(all_Links[i].href)){
+          countOne.push(all_Links[i].href);
+      }if(all_Links[i].ok !== 'ok'){
+          countBroken.push(all_Links[i].ok);
+      }
+  }
+  return {
+      total: all_Links.length,
+      unique: countOne.length,
+      broken: countBroken.length
+  }
+}
 
+const arrayOfDirectories = [];
+const readDir = (dir) => { 
+    const readingDirectory = fs.readdirSync(dir);
 
-
-// // Convierte md en html
-// const renderMdtoHTML = (content) =>{
-//   const render = md.render(content);
-//   return render;
+    readingDirectory.forEach((fileBasename) => {
+        const filePath = path.join(dir, fileBasename);
+        if (fileMd(filePath)){
+            arrayOfDirectories.push(filePath);
+        } else if (isDirectory(filePath)){
+            readDir(filePath);
+        }
+    }); 
+    // el arreglo vacío filtra archivos y si son markdown los pushea y si es un directorio debería ingresar a la función readDir otra vez
+    return arrayOfDirectories;
+  }
+// const readDir = (dir) =>{
+//   const files = fs.readdirSync(dir);
+//   const filePaths = files.map(file => path.join(dir, file));
+//   return filePaths.filter(pathFileBasename => fileMd(pathFileBasename));
 // }
 
+const forDirectory = (arrayOfDirectories) => {
+  return new Promise((resolve) => {
+      const files = readDir(arrayOfDirectories); // se llama al arreglo vacío
+      const arrayOfFiles = [];
+      const count = files.length-1;
+      let index = 0;
+
+      const iterator = pathFile => {
+          readingContent(pathFile).then((content) => {
+              extractingLinks(pathFile, content)
+              .then(links => { 
+                  arrayOfFiles.push(links);
+              }).finally( () => {
+                  index++;
+                  if(index <= count){
+                      iterator(files[index]);
+                  } else {
+                      resolve(arrayOfFiles.flat());
+                  }
+              })
+
+            });
+      }
+      iterator(files[index]);
+  })
+}
   module.exports = { 
     pathResult,
     isAbsolute,
@@ -118,6 +182,9 @@ const readDir = (dir) =>{
     extractingLinks,
     readingContent,
     linksOn_Off,
+    linksStst,
+    stats_Validate,
     readDir,
+    forDirectory,
 };
 
