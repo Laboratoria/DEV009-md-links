@@ -95,7 +95,7 @@ Finalmente, tienes la opción de combinar las dos anteriores: --validate --stats
 ****
  ## 6. Archivos que contiene el proyecto
 
-* `data.js:` Dentro de este archivo se encuentran todas las funciones puras que implementan operaciones relacionadas con el sistema de archivos y rutas de Node.js. También incluye implementaciones de bibliotecas como Axios y Markdown-it.
+* `data.js:` Dentro de este archivo se encuentran todas las funciones puras que implementan operaciones relacionadas con el sistema de archivos y rutas de Node.js. También incluye implementaciones de librerias como Axios y Markdown-it.
 
 * `index.js:` Este archivo actúa como la Interfaz de Línea de Comando (CLI). Su función principal es exportar y ejecutar la función mdlinks() con todos sus parámetros, lo que permite interactuar con la herramienta desde la línea de comandos.
 
