@@ -7,5 +7,35 @@
   "bootcamp": {
     "createdAt": "2023-08-22T22:00:38.678Z",
     "commit": "24f5a51ee0a15f345b59fcd2ef44c3616abdfce5"
+  },
+  "description": "Librería para leer archivos Markdown",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "axios": "^1.5.1",
+    "markdown-it": "^13.0.1",
+    "jest": "^29.6.4"
+  },
+  "scripts": {
+    "test": "jest --verbose --coverage"
+  },
+  "bin": {
+    "mdlinks": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KellPitt19/DEV009-md-links.git"
+  },
+  "author": "\"Kelly Pitter <kelly.g.pitter@gmail.com> (https://github.com/KellPitt19)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KellPitt19/DEV009-md-links/issues"
+  },
+  "homepage": "https://github.com/KellPitt19/DEV009-md-links#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

@@ -1,0 +1,1 @@
+Las funciones están diseñadas para trabajar con promesas y devolver resultados adecuados según el caso.
